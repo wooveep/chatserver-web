@@ -1,28 +1,30 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-20 16:14:26
+ * @LastEditTime: 2023-04-21 16:11:13
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/index.vue
 -->
 <script setup lang='ts'>
 import type { CSSProperties } from 'vue'
 import { computed, ref, watch } from 'vue'
-import { NButton, NLayoutSider } from 'naive-ui'
+import { NButton, NLayoutSider, NPopconfirm } from 'naive-ui'
 import { useChat } from '../../hooks/useChat'
 import List from './List.vue'
 import Footer from './Footer.vue'
-import { useAppStore } from '@/store'
+import { useAppStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { } from '@/components/common'
+import { SvgIcon } from '@/components/common'
 import type { ChatCreateNewReq, ChatCreateNewRes } from '@/models'
-import { fetchChatCreateNew } from '@/api'
+import { fetchChatCreateNew, fetchChatDelete } from '@/api'
+import { debounce } from '@/utils/functions/debounce'
 
 const appStore = useAppStore()
 // const chatStore = useChatStore()
 
 const { isMobile } = useBasicLayout()
 // const show = ref(false)
+const chatStore = useChatStore()
 
 const collapsed = computed(() => appStore.siderCollapsed)
 const { addHistory } = useChat()
@@ -79,6 +81,16 @@ watch(
     flush: 'post',
   },
 )
+async function handleDelete(event?: MouseEvent | TouchEvent) {
+  event?.stopPropagation()
+  const result = await fetchChatDelete({ chat_id: '-1' })
+  if (result.err_code === 0)
+    chatStore.resetChatState()
+  if (isMobile.value)
+    appStore.setSiderCollapsed(true)
+  window.location.reload()
+}
+const handleDeleteDebounce = debounce(handleDelete, 600)
 </script>
 
 <template>
@@ -102,6 +114,17 @@ watch(
         </div>
         <div class="flex-1 min-h-0 pb-4 overflow-hidden">
           <List />
+        </div>
+        <div class="p-4">
+          <NPopconfirm placement="bottom" @positive-click="handleDeleteDebounce()">
+            <template #trigger>
+              <NButton block>
+                <SvgIcon icon="ri:delete-bin-line" />
+                {{ $t('chat.clearChat') }}
+              </NButton>
+            </template>
+            {{ $t('chat.clearChatConfirm') }}
+          </NPopconfirm>
         </div>
       </main>
       <Footer />

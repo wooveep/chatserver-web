@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-20 18:57:17
- * @LastEditTime: 2023-04-20 22:39:03
+ * @LastEditTime: 2023-04-21 15:10:23
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/MemoryLevel/index.vue
 -->
@@ -66,10 +66,10 @@ onMounted(() => {
           v-if="mobile"
           v-model:value="memory"
           :marks="{
-            0: $t('setting.chatgpt_memory_choice_0'),
-            6: $t('setting.chatgpt_memory_choice_1'),
-            12: $t('setting.chatgpt_memory_choice_2'),
-            20: $t('setting.chatgpt_memory_choice_3'),
+            0: $t('setting.chatgpt_memory_mobile_choice_0'),
+            6: $t('setting.chatgpt_memory_mobile_choice_1'),
+            12: $t('setting.chatgpt_memory_mobile_choice_2'),
+            20: $t('setting.chatgpt_memory_mobile_choice_3'),
           }"
           :step="2"
           :min="0"

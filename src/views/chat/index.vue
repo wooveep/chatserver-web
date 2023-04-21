@@ -43,7 +43,7 @@ const dialog = useDialog()
 const ms = useMessage()
 const authStore = useAuthStore()
 const chatStore = useChatStore()
-
+const needPermission = computed(() => !authStore.token)
 useCopyCode()
 
 const { isMobile } = useBasicLayout()
@@ -91,7 +91,7 @@ async function fetchChatUUIDNew() {
     await sleep(200)
   }
   catch (error: any) {
-    loading.value = true
+    loading.value = false
   }
 }
 
@@ -408,6 +408,7 @@ function handleDelete(index: number) {
 //     },
 //   })
 // }
+
 function handleMemory() {
   showMemoryLevel.value = true
   memorylevel.value = chatStore.getMemoryLevel
@@ -466,19 +467,16 @@ async function refreshToken() {
   }
 }
 onMounted(() => {
+  if (!needPermission.value)
+    refreshToken()
   scrollToBottom()
   if (inputRef.value && !isMobile.value)
     inputRef.value?.focus()
-  refreshToken()
 })
-// onBeforeUpdate(() => {
-//   chatStore.resetChatState()
-// })
 
 onUnmounted(() => {
   if (loading.value)
     controller.abort()
-  // chatStore.resetChatState()
 })
 
 function sleep(ms: number) {
