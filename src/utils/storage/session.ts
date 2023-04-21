@@ -1,9 +1,9 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-17 12:47:17
- * @LastEditTime: 2023-04-18 10:00:55
+ * @LastEditTime: 2023-04-21 11:42:28
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/utils/storage/session.ts
+ * @FilePath: /chatserver-web/src/utils/storage/session.ts
  */
 import { deCrypto, enCrypto } from '../crypto'
 
@@ -73,4 +73,4 @@ export function createSessionStorage(options?: { expire?: number | null; crypto?
 }
 
 // export const ls = createSessionStorage()
-export const ss = createSessionStorage({ expire: null, crypto: false })
+export const ss = createSessionStorage({ expire: null, crypto: true })

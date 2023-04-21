@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-04-20 16:57:28
+ * @LastEditTime: 2023-04-21 09:15:58
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Permission.vue
 -->
@@ -16,13 +16,11 @@ import {
   useMessage,
 
 } from 'naive-ui'
-// import {  } from '@/api'
+
 import type {
   FormInst,
   FormRules,
 } from 'naive-ui'
-import { useRouter } from 'vue-router'
-import { useChat } from '../hooks/useChat'
 import { useAuthStore } from '@/store'
 import Icon403 from '@/icons/403.vue'
 import { fetchLogin } from '@/api'
@@ -33,9 +31,8 @@ interface Props {
 }
 
 defineProps<Props>()
-const { fetchChatHistoryList } = useChat()
 
-const router = useRouter()
+// const router = useRouter()
 const authStore = useAuthStore()
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
@@ -64,8 +61,7 @@ async function handleLoginButtonClick() {
 
     await authStore.setToken(result.data.token, result.data.expire_at)
     message.success('success')
-    fetchChatHistoryList()
-    router.push('/')
+    window.location.reload()
   }
   catch (error: any) {
     message.error(error.message)
@@ -83,7 +79,6 @@ function handlePress(event: KeyboardEvent) {
     handleLoginButtonClick()
   }
 }
-// const usernamelable = t('common.username')
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-20 16:37:54
+ * @LastEditTime: 2023-04-21 09:22:39
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/api/index.ts
  */
@@ -69,6 +69,12 @@ export function fetchUserInfo<UserInfoRes>() {
 export function fetchLogOut<T = any >() {
   return get<T>({
     url: '/user/logout',
+  })
+}
+
+export function fetchRefreshToken<UserLoginRes>() {
+  return get<UserLoginRes>({
+    url: '/user/refresh',
   })
 }
 

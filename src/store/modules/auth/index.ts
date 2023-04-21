@@ -1,30 +1,36 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 15:31:53
- * @LastEditTime: 2023-04-16 17:49:57
+ * @LastEditTime: 2023-04-21 11:40:20
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/store/modules/auth/index.ts
+ * @FilePath: /chatserver-web/src/store/modules/auth/index.ts
  */
 import { defineStore } from 'pinia'
-import { getToken, removeToken, setToken } from './helper'
+import { getTime, getToken, removeToken, setToken } from './helper'
 import { store, useUserStore } from '@/store'
 
 export interface AuthState {
   token: string | undefined
+  time: number | undefined
 }
 
 export const useAuthStore = defineStore('auth-store', {
   state: (): AuthState => ({
     token: getToken(),
+    time: getTime(),
   }),
-
+  getters: {
+    getTokenTime(state: AuthState) {
+      return state.time
+    },
+  },
   actions: {
     async setToken(token: string, expire_at: string) {
+      removeToken()
       this.token = token
-      // const decoded = jwt_decode(token) as UserInfo
+      setToken(token, new Date(expire_at).getTime())
       const userStore = useUserStore()
       await userStore.getUserInfo()
-      setToken(token, new Date(expire_at).getTime())
     },
 
     removeToken() {

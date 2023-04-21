@@ -1,11 +1,11 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-17 12:51:14
+ * @LastEditTime: 2023-04-21 11:41:52
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/store/modules/user/helper.ts
+ * @FilePath: /chatserver-web/src/store/modules/user/helper.ts
  */
-import { ls } from '@/utils/storage'
+import { ss } from '@/utils/storage'
 
 const LOCAL_NAME = 'userStorage'
 
@@ -38,10 +38,10 @@ export function defaultSetting(): UserState {
 }
 
 export function getLocalState(): UserState {
-  const localSetting: UserState | undefined = ls.get(LOCAL_NAME)
+  const localSetting: UserState | undefined = ss.get(LOCAL_NAME)
   return { ...defaultSetting(), ...localSetting }
 }
 
 export function setLocalState(setting: UserState): void {
-  ls.set(LOCAL_NAME, setting)
+  ss.set(LOCAL_NAME, setting)
 }

@@ -1,9 +1,9 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-18 17:25:33
+ * @LastEditTime: 2023-04-21 00:45:10
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/utils/request/axios.ts
+ * @FilePath: /chatserver-web/src/utils/request/axios.ts
  */
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'

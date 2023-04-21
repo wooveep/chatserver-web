@@ -12,10 +12,10 @@ import { useMemoryLevel } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useChatStore } from '@/store'
-import { fetchChatChatting, fetchChatCreateNew, fetchChatRegen, fetchChatUpdate } from '@/api'
+import { useAuthStore, useChatStore } from '@/store'
+import { fetchChatChatting, fetchChatCreateNew, fetchChatRegen, fetchChatUpdate, fetchRefreshToken } from '@/api'
 import { t } from '@/locales'
-import type { ChatChattingReq, ChatCreateNewReq, ChatCreateNewRes, ChatRegenerategReq } from '@/models'
+import type { ChatChattingReq, ChatCreateNewReq, ChatCreateNewRes, ChatRegenerategReq, UserLoginRes } from '@/models'
 
 let controller = new AbortController()
 const MemoryLevel = defineAsyncComponent(() => import('@/components/common/MemoryLevel/index.vue'))
@@ -41,7 +41,7 @@ const chatnewreq = ref<ChatCreateNewReq>({
 const route = useRoute()
 const dialog = useDialog()
 const ms = useMessage()
-
+const authStore = useAuthStore()
 const chatStore = useChatStore()
 
 useCopyCode()
@@ -451,17 +451,30 @@ const footerClass = computed(() => {
   return classes
 })
 
+async function refreshToken() {
+  const tokenExpire = authStore.getTokenTime ?? 0
+  const timenow = new Date().getTime()
+  const timediff = tokenExpire - timenow
+  if (timediff <= 600) {
+    const result = await fetchRefreshToken<UserLoginRes>().then((response) => {
+      const data = response.data
+      return data
+    })
+
+    authStore.setToken(result.token, result.expire_at)
+    return result.token
+  }
+}
 onMounted(() => {
   scrollToBottom()
   if (inputRef.value && !isMobile.value)
     inputRef.value?.focus()
+  refreshToken()
 })
 // onBeforeUpdate(() => {
 //   chatStore.resetChatState()
 // })
-// onUpdated(() => {
-//   fetchChatHistoryList()
-// })
+
 onUnmounted(() => {
   if (loading.value)
     controller.abort()
@@ -471,14 +484,6 @@ onUnmounted(() => {
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-
-// const MemoryLevelMarks = {
-//   0: '不记忆',
-//   4: '低',
-//   6: '中',
-//   8: '高',
-//   10: '最大',
-// }
 </script>
 
 <template>

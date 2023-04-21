@@ -1,9 +1,9 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-18 10:00:58
+ * @LastEditTime: 2023-04-21 10:53:23
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/utils/storage/local.ts
+ * @FilePath: /chatserver-web/src/utils/storage/local.ts
  */
 import { deCrypto, enCrypto } from '../crypto'
 
@@ -42,7 +42,7 @@ export function createLocalStorage(options?: { expire?: number | null; crypto?: 
     window.localStorage.setItem(key, json)
   }
 
-  function getRaw(key: string) {
+  function getTime(key: string) {
     const json = window.localStorage.getItem(key)
     if (json) {
       let storageData: StorageData | null = null
@@ -51,18 +51,17 @@ export function createLocalStorage(options?: { expire?: number | null; crypto?: 
         storageData = crypto ? deCrypto(json) : JSON.parse(json)
       }
       catch {
-
+        return null
       }
 
       if (storageData) {
-        const { data, expire } = storageData
-        if (expire === null || expire >= Date.now())
-          return { data, expire }
+        const { expire } = storageData
+        return expire
       }
-
-      remove(key)
+      // remove(key)
       return null
     }
+    return null
   }
 
   function get(key: string) {
@@ -102,7 +101,7 @@ export function createLocalStorage(options?: { expire?: number | null; crypto?: 
     remove,
     clear,
     setWithExpire,
-    getRaw,
+    getTime,
   }
 }
 
