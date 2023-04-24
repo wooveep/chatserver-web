@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-20 18:55:01
+ * @LastEditTime: 2023-04-24 17:12:19
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Layout.vue
 -->
@@ -41,13 +41,12 @@ const getContainerClass = computed(() => {
     { 'pl-[260px]': !isMobile.value && !collapsed.value },
   ]
 })
-onMounted(() => {
+
+onMounted(async () => {
   if (!needPermission.value)
-    fetchChatHistoryList()
+    await fetchChatHistoryList()
 })
-// onUnmounted(() => {
-//   resetChat()
-// })
+
 window.onbeforeunload = function (e) {
   e = e || window.event
   if (e)

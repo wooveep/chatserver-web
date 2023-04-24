@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-21 16:11:13
+ * @LastEditTime: 2023-04-24 16:39:07
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/index.vue
 -->
@@ -18,10 +18,10 @@ import { SvgIcon } from '@/components/common'
 import type { ChatCreateNewReq, ChatCreateNewRes } from '@/models'
 import { fetchChatCreateNew, fetchChatDelete } from '@/api'
 import { debounce } from '@/utils/functions/debounce'
+import { router } from '@/router'
 
 const appStore = useAppStore()
 // const chatStore = useChatStore()
-
 const { isMobile } = useBasicLayout()
 // const show = ref(false)
 const chatStore = useChatStore()
@@ -89,7 +89,9 @@ async function handleDelete(event?: MouseEvent | TouchEvent) {
   if (isMobile.value)
     appStore.setSiderCollapsed(true)
   window.location.reload()
+  router.push('/')
 }
+
 const handleDeleteDebounce = debounce(handleDelete, 600)
 </script>
 

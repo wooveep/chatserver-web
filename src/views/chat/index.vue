@@ -13,9 +13,9 @@ import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAuthStore, useChatStore } from '@/store'
-import { fetchChatChatting, fetchChatCreateNew, fetchChatRegen, fetchChatUpdate, fetchRefreshToken } from '@/api'
+import { fetchChatChatting, fetchChatRegen, fetchChatUpdate, fetchRefreshToken } from '@/api'
 import { t } from '@/locales'
-import type { ChatChattingReq, ChatCreateNewReq, ChatCreateNewRes, ChatRegenerategReq, UserLoginRes } from '@/models'
+import type { ChatChattingReq, ChatRegenerategReq, UserLoginRes } from '@/models'
 
 let controller = new AbortController()
 const MemoryLevel = defineAsyncComponent(() => import('@/components/common/MemoryLevel/index.vue'))
@@ -33,25 +33,20 @@ const regenreq = ref<ChatRegenerategReq>({
 
 })
 
-const chatnewreq = ref<ChatCreateNewReq>({
-  chat_name: 'New Chat',
-  preset_id: '1646361709138419712',
-})
-
 const route = useRoute()
 const dialog = useDialog()
 const ms = useMessage()
 const authStore = useAuthStore()
 const chatStore = useChatStore()
-const needPermission = computed(() => !authStore.token)
+// const needPermission = computed(() => !authStore.token)
 useCopyCode()
 
 const { isMobile } = useBasicLayout()
-const { addChat, updateChat, updateChatSome, addHistory } = useChat()
+const { addChat, updateChat, updateChatSome } = useChat()
 const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom } = useScroll()
 const { usingMemory, toggleUsingContext } = useMemoryLevel()
 
-let { chat_uuid } = route.params as { chat_uuid: string }
+const { chat_uuid } = route.params as { chat_uuid: string }
 // const uuid = '1647868345921310720'
 const dataSources = computed(() => chatStore.getChatByUuid(chat_uuid))
 const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActive)
@@ -74,26 +69,6 @@ dataSources.value.forEach((item, index) => {
   if (item.loading)
     updateChatSome(chat_uuid, index, { loading: false })
 })
-
-async function fetchChatUUIDNew() {
-  try {
-    const result = await fetchChatCreateNew<ChatCreateNewRes>(chatnewreq.value)
-    const chat_id = result.data.chat_id
-    addHistory(
-      {
-        uuid: chat_id,
-        title: chatnewreq.value.chat_name,
-        isEdit: false,
-      },
-      [],
-    )
-    chat_uuid = chat_id
-    await sleep(200)
-  }
-  catch (error: any) {
-    loading.value = false
-  }
-}
 
 async function fetchChattingOnce(lastText: string) {
   await fetchChatChatting<any>({
@@ -182,8 +157,8 @@ async function fetchChattingRegenerate(lastText: string, index: number) {
 }
 
 async function onConversation() {
-  if (!chat_uuid || chat_uuid === '')
-    await fetchChatUUIDNew()
+  // if (!chat_uuid || chat_uuid === '')
+  //   await fetchChatUUIDNew()
   const message = prompt.value
   if (dataSources.value.length !== 0) {
     const { error } = dataSources.value[dataSources.value.length - 1]
@@ -334,6 +309,7 @@ async function onRegenerate(index: number) {
 }
 
 function handleSubmit() {
+  refreshToken()
   onConversation()
 }
 
@@ -378,36 +354,6 @@ function handleExport() {
     },
   })
 }
-
-function handleDelete(index: number) {
-  if (loading.value)
-    return
-
-  dialog.warning({
-    title: t('chat.deleteMessage'),
-    content: t('chat.deleteMessageConfirm'),
-    positiveText: t('common.yes'),
-    negativeText: t('common.no'),
-    onPositiveClick: () => {
-      chatStore.deleteChatByUuid(chat_uuid, index)
-    },
-  })
-}
-
-// function handleClear() {
-//   if (loading.value)
-//     return
-
-//   dialog.warning({
-//     title: t('chat.clearChat'),
-//     content: t('chat.clearChatConfirm'),
-//     positiveText: t('common.yes'),
-//     negativeText: t('common.no'),
-//     onPositiveClick: () => {
-//       chatStore.clearChatByUuid(chat_uuid)
-//     },
-//   })
-// }
 
 function handleMemory() {
   showMemoryLevel.value = true
@@ -456,19 +402,17 @@ async function refreshToken() {
   const tokenExpire = authStore.getTokenTime ?? 0
   const timenow = new Date().getTime()
   const timediff = tokenExpire - timenow
-  if (timediff <= 600) {
+  if (timediff <= 600000) {
     const result = await fetchRefreshToken<UserLoginRes>().then((response) => {
       const data = response.data
       return data
     })
-
     authStore.setToken(result.token, result.expire_at)
     return result.token
   }
 }
+
 onMounted(() => {
-  if (!needPermission.value)
-    refreshToken()
   scrollToBottom()
   if (inputRef.value && !isMobile.value)
     inputRef.value?.focus()
@@ -479,9 +423,9 @@ onUnmounted(() => {
     controller.abort()
 })
 
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
+// function sleep(ms: number) {
+//   return new Promise(resolve => setTimeout(resolve, ms))
+// }
 </script>
 
 <template>
@@ -518,7 +462,6 @@ function sleep(ms: number) {
                 :loading="item.loading"
                 :errmsg="item.errmsg"
                 @regenerate="onRegenerate(index)"
-                @delete="handleDelete(index)"
               />
               <div class="sticky bottom-0 left-0 flex justify-center">
                 <NButton v-if="loading" type="warning" @click="handleStop">

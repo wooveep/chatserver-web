@@ -6,6 +6,7 @@ import { useAppStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { debounce } from '@/utils/functions/debounce'
 import { fetchChatDelete, fetchChatUpdate } from '@/api'
+import { router } from '@/router'
 
 const { isMobile } = useBasicLayout()
 
@@ -45,6 +46,7 @@ async function handleDelete(index: number, { uuid }: Chat.History, event?: Mouse
     chatStore.deleteHistory(index)
   if (isMobile.value)
     appStore.setSiderCollapsed(true)
+  router.push('/')
 }
 
 const handleDeleteDebounce = debounce(handleDelete, 600)

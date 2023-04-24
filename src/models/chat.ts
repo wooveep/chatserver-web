@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-17 16:21:36
- * @LastEditTime: 2023-04-20 16:42:15
+ * @LastEditTime: 2023-04-24 17:09:02
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/models/chat.ts
  */
@@ -171,7 +171,7 @@ export interface ChatListRes {
            * @type {Array<Chat.ChatOne>}
            * @memberof ChatListRes
            */
-  chat_list: Array<Chat.ChatOne>
+  chat_list: Array<Chat.ChatOne> | null
 }
 
 /**
@@ -205,6 +205,6 @@ export interface ChatRecordHistoryRes {
            * @type {Array<Chat.ChatRecordOne>}
            * @memberof ChatRecordHistoryRes
            */
-  record_list: Array<Chat.ChatRecordOne>
+  record_list: Array<Chat.ChatRecordOne> | null
 
 }

@@ -1,9 +1,9 @@
 {
-  "name": "whatserver-web",
+  "name": "chatserver-web",
   "version": "0.0.1",
   "private": false,
-  "description": "whatserver-web",
-  "author": "cloudyiLi",
+  "description": "chatserver-web",
+  "author": "cloudyi Li",
   "keywords": [
     "chatgpt",
     "vue"

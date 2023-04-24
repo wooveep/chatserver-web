@@ -1,12 +1,13 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-20 22:40:09
+ * @LastEditTime: 2023-04-24 17:12:00
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/hooks/useChat.ts
  */
-import { fetchChatRecordHistory, fetchChatlist } from '@/api'
-import type { ChatListRes, ChatRecordHistoryRes } from '@/models'
+import { ref } from 'vue'
+import { fetchChatCreateNew, fetchChatRecordHistory, fetchChatlist } from '@/api'
+import type { ChatCreateNewReq, ChatCreateNewRes, ChatListRes, ChatRecordHistoryRes } from '@/models'
 import { useChatStore } from '@/store'
 
 export function useChat() {
@@ -32,9 +33,11 @@ export function useChat() {
   const fetchChatHistoryRecord = async (uuid: string) => {
     try {
       const result = await fetchChatRecordHistory<ChatRecordHistoryRes>({ chat_id: uuid })
-      const recordlist = result.data.record_list
       const chat_uuid = result.data.chat_id
+      if (result.data.record_list === null)
+        return
       let inv = false
+      const recordlist = Array.from(result.data.record_list)
       for (const i of recordlist) {
         if (i.sender === 'user')
           inv = true
@@ -59,11 +62,35 @@ export function useChat() {
       throw new Error(error.message)
     }
   }
+  const fetchChatUUIDNew = async () => {
+    const chatnewreq = ref<ChatCreateNewReq>({
+      chat_name: 'New Chat',
+      preset_id: '1646361709138419712',
+    })
+    try {
+      const result = await fetchChatCreateNew<ChatCreateNewRes>(chatnewreq.value)
+      const chat_id = result.data.chat_id
+      addHistory(
+        {
+          uuid: chat_id,
+          title: chatnewreq.value.chat_name,
+          isEdit: false,
+        },
+        [],
+      )
+    }
+    catch (error: any) {
+    }
+  }
 
   const fetchChatHistoryList = async () => {
     try {
       const result = await fetchChatlist<ChatListRes>()
-      const chatList = result.data.chat_list
+      if (result.data.chat_list === null) {
+        await fetchChatUUIDNew()
+        return
+      }
+      const chatList = Array.from(result.data.chat_list)
       for (const i of chatList) {
         addHistory(
           {
@@ -92,5 +119,6 @@ export function useChat() {
     getChatByUuidAndIndex,
     fetchChatHistoryList,
     resetChat,
+    fetchChatUUIDNew,
   }
 }

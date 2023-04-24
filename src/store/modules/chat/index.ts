@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getLocalState, removeLocalState, setLocalState } from './helper'
+import { getLocalState, setLocalState } from './helper'
 import { router } from '@/router'
 
 export const useChatStore = defineStore('chat-store', {
@@ -17,19 +17,30 @@ export const useChatStore = defineStore('chat-store', {
       return (uuid: string) => {
         if (uuid !== '')
           return state.chat.find(item => item.uuid === uuid)?.data ?? []
-        return state.chat.find(item => item.uuid === state.active)?.data ?? []
+        else if (state.active !== '')
+          return state.chat.find(item => item.uuid === state.active)?.data ?? []
+        return []
       }
+    },
+    getHistory(state: Chat.ChatState) {
+      return state.history.length
     },
     getMemoryLevel(state: Chat.ChatState) {
       return state.memory
+    },
+    getActiveUuid(state: Chat.ChatState) {
+      return state.active
     },
   },
 
   actions: {
 
     resetChatState() {
-      removeLocalState()
-      // setLocalState({ active: '', memory: 1, history: [], chat: [] })
+      this.active = ''
+      this.memory = 4
+      this.history = []
+      this.chat = []
+      this.recordState()
     },
 
     setMemoryLevel(memory: number) {

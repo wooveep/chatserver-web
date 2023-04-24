@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-20 15:07:03
+ * @LastEditTime: 2023-04-23 22:35:52
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/utils/request/index.ts
  */
@@ -41,7 +41,7 @@ function http<T = any>(
     const authStore = useAuthStore()
     if (error.err_code === 40001) {
       authStore.removeToken()
-      window.location.reload()
+      window.location.replace('/login')
     }
     throw new Error(error.message)
   }

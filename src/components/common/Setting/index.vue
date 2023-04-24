@@ -1,15 +1,16 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-17 11:40:23
+ * @LastEditTime: 2023-04-23 16:18:08
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/components/common/Setting/index.vue
+ * @FilePath: /chatserver-web/src/components/common/Setting/index.vue
 -->
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { NCard, NModal, NTabPane, NTabs } from 'naive-ui'
 import General from './General.vue'
 import { SvgIcon } from '@/components/common'
+import { useUserStore } from '@/store'
 
 const props = defineProps<Props>()
 
@@ -42,6 +43,14 @@ function handleReload() {
     reload.value = false
   }, 0)
 }
+async function refreshUserInfo() {
+  const userStore = useUserStore()
+  await userStore.getUserInfo()
+}
+
+onMounted(() => {
+  refreshUserInfo()
+})
 </script>
 
 <template>
