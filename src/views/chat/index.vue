@@ -12,15 +12,17 @@ import { useMemoryLevel } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useAuthStore, useChatStore } from '@/store'
+import { useAuthStore, useChatStore, usePresetStore } from '@/store'
 import { fetchChatChatting, fetchChatRegen, fetchChatUpdate, fetchRefreshToken } from '@/api'
 import { t } from '@/locales'
 import type { ChatChattingReq, ChatRegenerategReq, UserLoginRes } from '@/models'
 
 let controller = new AbortController()
 const MemoryLevel = defineAsyncComponent(() => import('@/components/common/MemoryLevel/index.vue'))
+const PresetStore = defineAsyncComponent(() => import('@/components/common/PresetStore/index.vue'))
 
 const showMemoryLevel = ref(false)
+const showPreset = ref(false)
 const chattingreq = ref<ChatChattingReq>({
   chat_id: '',
   message: '',
@@ -38,6 +40,14 @@ const dialog = useDialog()
 const ms = useMessage()
 const authStore = useAuthStore()
 const chatStore = useChatStore()
+const presetStore = usePresetStore()
+const memorylevel = ref<number>(0)
+const prompt = ref<string>('')
+const loading = ref<boolean>(false)
+const errorstatus = ref<boolean>(false)
+const inputRef = ref<Ref | null>(null)
+const questionid = ref<string>('')
+
 // const needPermission = computed(() => !authStore.token)
 useCopyCode()
 
@@ -47,16 +57,10 @@ const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom } = useScroll()
 const { usingMemory, toggleUsingContext } = useMemoryLevel()
 
 const { chat_uuid } = route.params as { chat_uuid: string }
-// const uuid = '1647868345921310720'
+
 const dataSources = computed(() => chatStore.getChatByUuid(chat_uuid))
 const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActive)
-const memorylevel = ref<number>(0)
-// const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion)))
-const prompt = ref<string>('')
-const loading = ref<boolean>(false)
-const errorstatus = ref<boolean>(false)
-const inputRef = ref<Ref | null>(null)
-const questionid = ref<string>('')
+const currentPresetName = computed(() => presetStore.getPresetNameByActive ?? '')
 
 // 添加PromptStore
 // const promptStore = usePromptStore()
@@ -186,7 +190,7 @@ async function onConversation() {
   )
   if (dataSources.value.length === 1) {
     const title = currentChatHistory.value?.title ?? 'New Chat'
-    await fetchChatUpdate({ chat_id: chat_uuid, chat_name: title })
+    await fetchChatUpdate({ chat_id: chat_uuid, chat_name: title, preset_id: undefined })
   }
   scrollToBottom()
 
@@ -359,6 +363,10 @@ function handleMemory() {
   showMemoryLevel.value = true
   memorylevel.value = chatStore.getMemoryLevel
 }
+function handlePreset() {
+  showPreset.value = true
+  // memorylevel.value = chatStore.getMemoryLevel
+}
 function handleEnter(event: KeyboardEvent) {
   if (!isMobile.value) {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -422,10 +430,6 @@ onUnmounted(() => {
   if (loading.value)
     controller.abort()
 })
-
-// function sleep(ms: number) {
-//   return new Promise(resolve => setTimeout(resolve, ms))
-// }
 </script>
 
 <template>
@@ -434,6 +438,7 @@ onUnmounted(() => {
       v-if="isMobile"
       :using-memory="usingMemory"
       :show-memory-level="showMemoryLevel"
+      :show-preset="showPreset"
       @export="handleExport"
       @toggle-using-context="toggleUsingContext"
     />
@@ -447,7 +452,7 @@ onUnmounted(() => {
           <template v-if="!dataSources.length">
             <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
               <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-              <span>Hello!</span>
+              <span>Hello! 当前我的角色是：{{ currentPresetName }}</span>
             </div>
           </template>
           <template v-else>
@@ -479,6 +484,12 @@ onUnmounted(() => {
     <footer :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
+          <HoverButton v-if="!isMobile" @click="handlePreset">
+            <span class="text-xl text-[#4f555e] dark:text-white">
+              <SvgIcon icon="ri:store-3-line" />
+            </span>
+          </HoverButton>
+          <PresetStore v-if="showPreset" v-model:visible="showPreset" :mobile="false" :memorylevel="memorylevel" />
           <HoverButton v-if="!isMobile" @click="handleExport">
             <span class="text-xl text-[#4f555e] dark:text-white">
               <SvgIcon icon="ri:download-2-line" />

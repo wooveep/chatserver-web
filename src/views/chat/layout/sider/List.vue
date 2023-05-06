@@ -2,18 +2,21 @@
 import { computed } from 'vue'
 import { NInput, NPopconfirm, NScrollbar } from 'naive-ui'
 import { SvgIcon } from '@/components/common'
-import { useAppStore, useChatStore } from '@/store'
+import { useAppStore, useChatStore, usePresetStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { debounce } from '@/utils/functions/debounce'
 import { fetchChatDelete, fetchChatUpdate } from '@/api'
 import { router } from '@/router'
+import type { Chat } from '@/typings/chat'
 
 const { isMobile } = useBasicLayout()
 
 const appStore = useAppStore()
 const chatStore = useChatStore()
+const presetStore = usePresetStore()
 
 const dataSources = computed(() => chatStore.history)
+const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActive)
 
 async function handleSelect({ uuid }: Chat.History) {
   if (isActive(uuid))
@@ -22,14 +25,14 @@ async function handleSelect({ uuid }: Chat.History) {
   if (chatStore.active)
     chatStore.updateHistory(chatStore.active, { isEdit: false })
   await chatStore.setActive(uuid)
-
+  presetStore.setActive(currentChatHistory.value?.presetid ?? '')
   if (isMobile.value)
     appStore.setSiderCollapsed(true)
 }
 
 async function handleEditUpdate({ uuid, title }: Chat.History, isEdit: boolean, event?: MouseEvent) {
   event?.stopPropagation()
-  const result = await fetchChatUpdate({ chat_id: uuid, chat_name: title })
+  const result = await fetchChatUpdate({ chat_id: uuid, chat_name: title, preset_id: undefined })
   if (result.err_code === 0)
     chatStore.updateHistory(uuid, { isEdit })
 }
@@ -54,7 +57,7 @@ const handleDeleteDebounce = debounce(handleDelete, 600)
 async function handleEnter({ uuid, title }: Chat.History, isEdit: boolean, event: KeyboardEvent) {
   event?.stopPropagation()
   if (event.key === 'Enter') {
-    const result = await fetchChatUpdate({ chat_id: uuid, chat_name: title })
+    const result = await fetchChatUpdate({ chat_id: uuid, chat_name: title, preset_id: undefined })
 
     if (result.err_code === 0)
       chatStore.updateHistory(uuid, { isEdit })

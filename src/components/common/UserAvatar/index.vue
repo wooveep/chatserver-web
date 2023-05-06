@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-14 09:52:13
- * @LastEditTime: 2023-04-23 16:32:38
+ * @LastEditTime: 2023-05-06 22:21:15
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/UserAvatar/index.vue
 -->
@@ -55,15 +55,15 @@ async function handleLogoutButtonClick(e: MouseEvent) {
       </template>
     </div>
     <div class="flex-1 min-w-0 ml-2">
-      <h2 class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap">
+      <h2 class="overflow-hidden font-bold text-lg text-ellipsis whitespace-nowrap">
         {{ userInfo.nickname }}
       </h2>
-      <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
+      <!-- <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
         <span
           v-if="isString(userInfo.email) && userInfo.email !== ''"
           v-html="userInfo.email"
         />
-      </p>
+      </p> -->
       <NButton
         :text="true"
         @click="handleLogoutButtonClick"

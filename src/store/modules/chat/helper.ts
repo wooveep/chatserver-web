@@ -1,10 +1,11 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-20 21:43:01
+ * @LastEditTime: 2023-05-04 17:17:50
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/store/modules/chat/helper.ts
  */
+import type { Chat } from '@/typings/chat'
 import { ss } from '@/utils/storage'
 
 const LOCAL_NAME = 'chatStorage'

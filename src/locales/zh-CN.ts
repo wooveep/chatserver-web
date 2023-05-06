@@ -94,6 +94,7 @@ export default {
     chatgpt_memory_mobile_choice_1: '普通',
     chatgpt_memory_mobile_choice_2: '中等',
     chatgpt_memory_mobile_choice_3: '最强',
+    sotre_title: 'AI助手角色选择',
   },
   store: {
     siderButton: '提示词商店',

@@ -1,10 +1,13 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-17 16:21:36
- * @LastEditTime: 2023-04-24 17:09:02
+ * @LastEditTime: 2023-05-06 21:39:22
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/models/chat.ts
  */
+
+import type { Chat } from '@/typings/chat'
+
 /**
  *
  * @export
@@ -123,13 +126,21 @@ export interface ChatUpdateReq {
            * @type {string}
            * @memberof ChatUpdateReq
            */
-  chat_name: string
+  chat_name: string | undefined
   /**
            *
            * @type {string}
            * @memberof ChatUpdateReq
            */
   chat_id: string
+
+  /**
+           *
+           * @type {string}
+           * @memberof ChatUpdateReq
+           */
+  preset_id: string | undefined
+
 }
 
 /**
@@ -159,7 +170,19 @@ export interface ChatDeleteReq {
            */
   chat_id: string
 }
-
+/**
+ *
+ * @export
+ * @interface ChatClearReq
+ */
+export interface ChatClearReq {
+  /**
+           *
+           * @type {string}
+           * @memberof ChatClearReq
+           */
+  chat_id: string
+}
 /**
  *
  * @export

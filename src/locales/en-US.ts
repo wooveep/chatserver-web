@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-13 19:14:02
- * @LastEditTime: 2023-04-20 22:45:07
+ * @LastEditTime: 2023-05-06 13:18:14
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/locales/en-US.ts
  */
@@ -100,6 +100,7 @@ export default {
     chatgpt_memory_mobile_choice_1: 'Normal',
     chatgpt_memory_mobile_choice_2: 'Medium',
     chatgpt_memory_mobile_choice_3: 'Strong',
+    sotreTitle: 'AI Role Prompt Store',
   },
   store: {
     siderButton: 'Prompt Store',

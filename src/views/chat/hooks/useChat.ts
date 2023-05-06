@@ -1,35 +1,42 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-24 17:12:00
+ * @LastEditTime: 2023-05-06 22:17:37
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/hooks/useChat.ts
  */
 import { ref } from 'vue'
+import { usePreset } from './userPreset'
 import { fetchChatCreateNew, fetchChatRecordHistory, fetchChatlist } from '@/api'
 import type { ChatCreateNewReq, ChatCreateNewRes, ChatListRes, ChatRecordHistoryRes } from '@/models'
-import { useChatStore } from '@/store'
+import { useChatStore, usePresetStore } from '@/store'
+import type { Chat } from '@/typings/chat'
 
 export function useChat() {
   const chatStore = useChatStore()
+  const presetStore = usePresetStore()
+  const { fetchPreset } = usePreset()
 
   const getChatByUuidAndIndex = (uuid: string, index: number) => {
     return chatStore.getChatByUuidAndIndex(uuid, index)
   }
 
-  const addChat = (uuid: string, chat: Chat.Chat) => {
+  const addChat = (uuid: string, chat: Chat.Record) => {
     chatStore.addChatByUuid(uuid, chat)
   }
-  const addHistory = (history: Chat.History, chat: Chat.Chat[]) => {
+
+  const addHistory = (history: Chat.History, chat: Chat.Record[]) => {
     chatStore.addHistory(history, chat)
   }
-  const updateChat = (uuid: string, index: number, chat: Chat.Chat) => {
+
+  const updateChat = (uuid: string, index: number, chat: Chat.Record) => {
     chatStore.updateChatByUuid(uuid, index, chat)
   }
 
-  const updateChatSome = (uuid: string, index: number, chat: Partial<Chat.Chat>) => {
+  const updateChatSome = (uuid: string, index: number, chat: Partial<Chat.Record>) => {
     chatStore.updateChatSomeByUuid(uuid, index, chat)
   }
+
   const fetchChatHistoryRecord = async (uuid: string) => {
     try {
       const result = await fetchChatRecordHistory<ChatRecordHistoryRes>({ chat_id: uuid })
@@ -62,10 +69,11 @@ export function useChat() {
       throw new Error(error.message)
     }
   }
+
   const fetchChatUUIDNew = async () => {
     const chatnewreq = ref<ChatCreateNewReq>({
       chat_name: 'New Chat',
-      preset_id: '1646361709138419712',
+      preset_id: presetStore.getActiveUuid,
     })
     try {
       const result = await fetchChatCreateNew<ChatCreateNewRes>(chatnewreq.value)
@@ -75,6 +83,7 @@ export function useChat() {
           uuid: chat_id,
           title: chatnewreq.value.chat_name,
           isEdit: false,
+          presetid: presetStore.getActiveUuid,
         },
         [],
       )
@@ -84,6 +93,7 @@ export function useChat() {
   }
 
   const fetchChatHistoryList = async () => {
+    await fetchPreset()
     try {
       const result = await fetchChatlist<ChatListRes>()
       if (result.data.chat_list === null) {
@@ -91,16 +101,19 @@ export function useChat() {
         return
       }
       const chatList = Array.from(result.data.chat_list)
+      //
       for (const i of chatList) {
         addHistory(
           {
             uuid: i.chat_id,
             title: i.chat_name,
             isEdit: false,
+            presetid: i.preset_id,
           },
           [],
         )
         await fetchChatHistoryRecord(i.chat_id)
+        presetStore.setActive(chatStore.getChatHistoryByCurrentActive?.presetid ?? '')
       }
     }
     catch (error: any) {

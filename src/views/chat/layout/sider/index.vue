@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-24 16:39:07
+ * @LastEditTime: 2023-05-06 17:17:57
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/index.vue
 -->
@@ -12,7 +12,7 @@ import { NButton, NLayoutSider, NPopconfirm } from 'naive-ui'
 import { useChat } from '../../hooks/useChat'
 import List from './List.vue'
 import Footer from './Footer.vue'
-import { useAppStore, useChatStore } from '@/store'
+import { useAppStore, useChatStore, usePresetStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { SvgIcon } from '@/components/common'
 import type { ChatCreateNewReq, ChatCreateNewRes } from '@/models'
@@ -21,7 +21,7 @@ import { debounce } from '@/utils/functions/debounce'
 import { router } from '@/router'
 
 const appStore = useAppStore()
-// const chatStore = useChatStore()
+const presetStore = usePresetStore()
 const { isMobile } = useBasicLayout()
 // const show = ref(false)
 const chatStore = useChatStore()
@@ -32,7 +32,7 @@ const { addHistory } = useChat()
 async function handleAdd() {
   const chatnewreq = ref<ChatCreateNewReq>({
     chat_name: 'New Chat',
-    preset_id: '1646361709138419712',
+    preset_id: presetStore.getActiveUuid,
   })
   const result = await fetchChatCreateNew<ChatCreateNewRes>(chatnewreq.value)
   const chat_id = result.data.chat_id
@@ -41,6 +41,7 @@ async function handleAdd() {
       uuid: chat_id,
       title: chatnewreq.value.chat_name,
       isEdit: false,
+      presetid: presetStore.getActiveUuid,
     },
     [],
   )

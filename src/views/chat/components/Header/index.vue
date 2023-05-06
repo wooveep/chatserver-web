@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-04-20 20:33:49
+ * @LastEditTime: 2023-05-04 17:02:07
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/components/Header/index.vue
 -->
@@ -13,6 +13,7 @@ import { useAppStore, useChatStore } from '@/store'
 interface Props {
   usingMemory: number
   showMemoryLevel: boolean
+  showPreset: boolean
 }
 
 interface Emit {
@@ -23,8 +24,10 @@ defineProps<Props>()
 const emit = defineEmits<Emit>()
 
 const MemoryLevel = defineAsyncComponent(() => import('@/components/common/MemoryLevel/index.vue'))
+const PresetStore = defineAsyncComponent(() => import('@/components/common/PresetStore/index.vue'))
 
 const showMemoryMoblie = ref(false)
+const showPresetMoblie = ref(false)
 
 const appStore = useAppStore()
 const chatStore = useChatStore()
@@ -68,6 +71,12 @@ function handleExport() {
         {{ currentChatHistory?.title ?? '' }}
       </h1>
       <div class="flex items-center space-x-2">
+        <HoverButton @click="showPresetMoblie = true">
+          <span class="text-xl text-[#4f555e] dark:text-white">
+            <SvgIcon icon="ri:store-3-line" />
+          </span>
+        </HoverButton>
+        <PresetStore v-if="showPresetMoblie" v-model:visible="showPresetMoblie" :mobile="true" />
         <HoverButton @click="showMemoryMoblie = true">
           <span class="text-xl" :class="{ 'text-[#4b9e5f]': usingMemory, 'text-[#a8071a]': !usingMemory }">
             <SvgIcon icon="ri:chat-history-line" />

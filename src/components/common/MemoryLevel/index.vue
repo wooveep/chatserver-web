@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-20 18:57:17
- * @LastEditTime: 2023-04-21 15:10:23
+ * @LastEditTime: 2023-05-04 16:44:40
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/MemoryLevel/index.vue
 -->
@@ -34,7 +34,7 @@ const show = computed({
     emit('update:visible', visible)
   },
 })
-const memory = ref(0)
+const memory = ref(1)
 
 function updateChatgptParams(memory: number) {
   chatStore.setMemoryLevel(memory)
@@ -52,13 +52,13 @@ onMounted(() => {
           v-if="!mobile"
           v-model:value="memory"
           :marks="{
-            0: $t('setting.chatgpt_memory_choice_0'),
+            1: $t('setting.chatgpt_memory_choice_0'),
             6: $t('setting.chatgpt_memory_choice_1'),
             12: $t('setting.chatgpt_memory_choice_2'),
             20: $t('setting.chatgpt_memory_choice_3'),
           }"
           :step="2"
-          :min="0"
+          :min="1"
           :max="20"
           @update:value="updateChatgptParams(memory) "
         />
@@ -66,13 +66,13 @@ onMounted(() => {
           v-if="mobile"
           v-model:value="memory"
           :marks="{
-            0: $t('setting.chatgpt_memory_mobile_choice_0'),
+            1: $t('setting.chatgpt_memory_mobile_choice_0'),
             6: $t('setting.chatgpt_memory_mobile_choice_1'),
             12: $t('setting.chatgpt_memory_mobile_choice_2'),
             20: $t('setting.chatgpt_memory_mobile_choice_3'),
           }"
           :step="2"
-          :min="0"
+          :min="1"
           :max="20"
           @update:value="updateChatgptParams(memory) "
         />

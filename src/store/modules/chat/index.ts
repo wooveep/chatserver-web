@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { getLocalState, setLocalState } from './helper'
 import { router } from '@/router'
+import type { Chat } from '@/typings/chat'
 
 export const useChatStore = defineStore('chat-store', {
   state: (): Chat.ChatState => getLocalState(),
@@ -48,7 +49,7 @@ export const useChatStore = defineStore('chat-store', {
       this.recordState()
     },
 
-    addHistory(history: Chat.History, chatData: Chat.Chat[] = []) {
+    addHistory(history: Chat.History, chatData: Chat.Record[] = []) {
       this.history.unshift(history)
       this.chat.unshift({ uuid: history.uuid, data: chatData })
       this.active = history.uuid
@@ -112,22 +113,24 @@ export const useChatStore = defineStore('chat-store', {
       return null
     },
 
-    addChatByUuid(uuid: string, chat: Chat.Chat) {
-      if (!uuid || uuid === '') {
-        if (this.history.length === 0) {
-          const uuid = String(Date.now())
-          this.history.push({ uuid, title: chat.text, isEdit: false })
-          this.chat.push({ uuid, data: [chat] })
-          this.active = uuid
-          this.recordState()
-        }
-        else {
-          this.chat[0].data.push(chat)
-          if (this.history[0].title === 'New Chat')
-            this.history[0].title = chat.text
-          this.recordState()
-        }
-      }
+    addChatByUuid(uuid: string, chat: Chat.Record) {
+      if (!uuid || uuid === '')
+        return
+
+      //   if (this.history.length === 0) {
+      //     const uuid = String(Date.now())
+      //     this.history.push({ uuid, title: chat.text, isEdit: false })
+      //     this.chat.push({ uuid, data: [chat] })
+      //     this.active = uuid
+      //     this.recordState()
+      //   }
+      //   else {
+      //     this.chat[0].data.push(chat)
+      //     if (this.history[0].title === 'New Chat')
+      //       this.history[0].title = chat.text
+      //     this.recordState()
+      //   }
+      // }
 
       const index = this.chat.findIndex(item => item.uuid === uuid)
       if (index !== -1) {
@@ -138,7 +141,7 @@ export const useChatStore = defineStore('chat-store', {
       }
     },
 
-    updateChatByUuid(uuid: string, index: number, chat: Chat.Chat) {
+    updateChatByUuid(uuid: string, index: number, chat: Chat.Record) {
       if (!uuid || uuid === '') {
         if (this.chat.length) {
           this.chat[0].data[index] = chat
@@ -154,7 +157,7 @@ export const useChatStore = defineStore('chat-store', {
       }
     },
 
-    updateChatSomeByUuid(uuid: string, index: number, chat: Partial<Chat.Chat>) {
+    updateChatSomeByUuid(uuid: string, index: number, chat: Partial<Chat.Record>) {
       if (!uuid || uuid === '') {
         if (this.chat.length) {
           this.chat[0].data[index] = { ...this.chat[0].data[index], ...chat }

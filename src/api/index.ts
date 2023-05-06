@@ -1,14 +1,14 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-21 09:22:39
+ * @LastEditTime: 2023-05-06 21:33:13
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/api/index.ts
  */
 import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { get, hdelete, post, postEvent } from '@/utils/request'
 import type {
-  ChatChattingReq, ChatCreateNewReq, ChatDeleteReq, ChatRecordHistoryReq, ChatRegenerategReq,
+  ChatChattingReq, ChatClearReq, ChatCreateNewReq, ChatDeleteReq, ChatRecordHistoryReq, ChatRegenerategReq,
   ChatUpdateReq, UserLoginReq, UserRegisterReq, UserRegisterRes,
   UserVerifyEmailReq, UserVerifyRes,
   UserVerifyUserNameReq,
@@ -78,6 +78,12 @@ export function fetchRefreshToken<UserLoginRes>() {
   })
 }
 
+export function fetchPresetList<PresetListRes>() {
+  return get<PresetListRes>({
+    url: '/preset/list',
+  })
+}
+
 export function fetchChatCreateNew<ChatCreateNewRes>(chat: ChatCreateNewReq) {
   return post<ChatCreateNewRes>({
     url: '/chat/new',
@@ -103,6 +109,13 @@ export function fetchChatDelete<T = any>(chat: ChatDeleteReq) {
   return hdelete<T>({
     url: `/chat/delete?${deleteparams}`,
     // data: deleteparams,
+  })
+}
+
+export function fetchChatClear<T = any>(chat: ChatClearReq) {
+  const deleteparams = `chat_id=${chat.chat_id}`
+  return hdelete<T>({
+    url: `/chat/clear?${deleteparams}`,
   })
 }
 
