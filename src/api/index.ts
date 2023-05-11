@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-06 21:33:13
+ * @LastEditTime: 2023-05-10 17:00:31
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/api/index.ts
  */
@@ -65,7 +65,12 @@ export function fetchUserInfo<UserInfoRes>() {
     url: '/user/info',
   })
 }
-
+export function fetchUserActive<T = any>(code: string) {
+  const getparams = `active_code=${code}`
+  return get<T>({
+    url: `/active?${getparams}`,
+  })
+}
 export function fetchLogOut<T = any >() {
   return get<T>({
     url: '/user/logout',

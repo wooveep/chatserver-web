@@ -452,7 +452,7 @@ onUnmounted(() => {
           <template v-if="!dataSources.length">
             <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
               <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-              <span>Hello! 当前我的角色是：{{ currentPresetName }}</span>
+              <span class="text-2xl text-[#4f555e] dark:text-white">Hello! 当前我的角色是：{{ currentPresetName }}</span>
             </div>
           </template>
           <template v-else>

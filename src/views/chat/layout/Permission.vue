@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-04-21 09:15:58
+ * @LastEditTime: 2023-05-10 12:13:48
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Permission.vue
 -->
@@ -25,6 +25,8 @@ import { useAuthStore } from '@/store'
 import Icon403 from '@/icons/403.vue'
 import { fetchLogin } from '@/api'
 import type { UserLoginReq, UserLoginRes } from '@/models'
+import { myTrim } from '@/utils/format'
+import { CryptoPassword } from '@/utils/crypto'
 
 interface Props {
   visible: boolean
@@ -55,7 +57,9 @@ const rules: FormRules = {
 
 async function handleLoginButtonClick() {
   try {
-    const result = await fetchLogin<UserLoginRes>(modelRef.value)
+    const username = myTrim(modelRef.value.username ?? '')
+    const password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
+    const result = await fetchLogin<UserLoginRes>({ username, password })
     if (result.err_code !== 0)
       throw new Error(result.message)
 

@@ -16,6 +16,8 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/store'
 import { fetchLogin } from '@/api'
 import type { UserLoginReq, UserLoginRes } from '@/models'
+import { CryptoPassword } from '@/utils/crypto'
+import { myTrim } from '@/utils/format'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -40,7 +42,9 @@ const rules: FormRules = {
 
 async function handleLoginButtonClick() {
   try {
-    const result = await fetchLogin<UserLoginRes>(modelRef.value)
+    const username = myTrim(modelRef.value.username ?? '')
+    const password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
+    const result = await fetchLogin<UserLoginRes>({ username, password })
     if (result.err_code !== 0)
       throw new Error(result.message)
 

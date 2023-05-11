@@ -5,6 +5,8 @@ import type {
   FormItemInst,
   FormItemRule,
   FormRules,
+  MessageReactive,
+  MessageType,
 } from 'naive-ui'
 import {
 
@@ -17,6 +19,9 @@ import {
 import { useRouter } from 'vue-router'
 import type { UserRegisterReq, UserRegisterRes, UserVerifyEmailReq, UserVerifyRes, UserVerifyUserNameReq } from '@/models'
 import { fetchRegister, fetchVerifyEmail, fetchVerifyUsername } from '@/api'
+import { CryptoPassword } from '@/utils/crypto'
+import { myTrim } from '@/utils/format'
+import { t } from '@/locales'
 
 interface ModelType {
   username: string | null
@@ -62,6 +67,14 @@ function validatePasswordStartWith(
 function validatePasswordSame(rule: FormItemRule, value: string): boolean {
   return value === modelRef.value.password
 }
+const types: MessageType[] = [
+  'success',
+  'info',
+  'warning',
+  'error',
+  'loading',
+]
+let msgReactive: MessageReactive | null = null
 const rules: FormRules = {
   username: [
     {
@@ -160,24 +173,33 @@ function handlePasswordInput() {
     rPasswordFormItemRef.value?.validate({ trigger: 'password-input' })
 }
 async function handleRegisterButtonClick(e: MouseEvent) {
+  msgReactive = message.create('正在注册,请等待', {
+    type: types[4],
+    duration: 1000000,
+  })
   e.preventDefault()
   try {
     user.value.username = modelRef.value.username
     user.value.email = modelRef.value.email
-    user.value.password = modelRef.value.password
+    user.value.password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
     const result = await fetchRegister<UserRegisterRes>(user.value)
     const isSuccess = result.data.is_success
-    const msg = result.message
     if (isSuccess) {
-      message.success(msg)
-      router.push('/login')
+      if (msgReactive) {
+        msgReactive.type = types[0]
+        msgReactive.content = `${t('common.registerSuccess')}`
+      }
+      router.push('/')
     }
     else {
       throw new Error('Registration failed.')
     }
   }
   catch (error: any) {
-    message.error(error.message ?? 'error')
+    if (msgReactive) {
+      msgReactive.type = types[3]
+      msgReactive.content = `${error.message}\n${t('common.registerSuccess')}`
+    }
     modelRef.value.password = ''
     modelRef.value.reenteredPassword = ''
   }

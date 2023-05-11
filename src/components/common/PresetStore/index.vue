@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-20 18:57:17
- * @LastEditTime: 2023-05-06 21:53:38
+ * @LastEditTime: 2023-05-06 22:26:24
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/PresetStore/index.vue
 -->
@@ -46,13 +46,14 @@ function updateActivePreset(UUID: string) {
   // 更新chatstore中的preset值
 }
 async function updateChatpreset() {
-  chatStore.updateHistory(chatStore.active, { presetid: checkPreset.value })
   const result = await fetchChatClear({ chat_id: chatStore.active })
   if (result.err_code === 0)
     chatStore.clearChatByUuid(chatStore.active)
-  const upresult = await fetchChatUpdate({ chat_id: chatStore.active, preset_id: checkPreset.value, chat_name: undefined })
-  if (upresult.err_code === 0)
+  const upresult = await fetchChatUpdate({ chat_id: chatStore.active, preset_id: checkPreset.value, chat_name: 'New Chat' })
+  if (upresult.err_code === 0) {
+    chatStore.updateHistory(chatStore.active, { presetid: checkPreset.value, title: 'New Chat' })
     message.success('AI 助手角色切换成功')
+  }
   show.value = false
 }
 onMounted(() => {

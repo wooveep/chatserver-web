@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-06 22:17:37
+ * @LastEditTime: 2023-05-10 19:03:25
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/hooks/useChat.ts
  */
@@ -94,9 +94,11 @@ export function useChat() {
 
   const fetchChatHistoryList = async () => {
     await fetchPreset()
+    const presetlist = Array.from(presetStore.getPresetList)
     try {
       const result = await fetchChatlist<ChatListRes>()
       if (result.data.chat_list === null) {
+        presetStore.setActive(presetlist[presetlist.length - 1].preset_id)
         await fetchChatUUIDNew()
         return
       }

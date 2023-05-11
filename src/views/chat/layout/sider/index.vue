@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-06 17:17:57
+ * @LastEditTime: 2023-05-11 10:37:59
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/index.vue
 -->
@@ -134,7 +134,7 @@ const handleDeleteDebounce = debounce(handleDelete, 600)
     </div>
   </NLayoutSider>
   <template v-if="isMobile">
-    <div v-show="!collapsed" class="fixed inset-0 z-40 bg-black/40" @click="handleUpdateCollapsed" />
+    <div v-show="!collapsed" class="fixed inset-0 z-40 w-full h-full bg-black/40" @click="handleUpdateCollapsed" />
   </template>
   <!-- <PromptStore v-model:visible="show" /> -->
 </template>

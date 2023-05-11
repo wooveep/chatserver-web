@@ -1,3 +1,10 @@
+/*
+ * @Author: cloudyi.li
+ * @Date: 2023-03-23 13:51:37
+ * @LastEditTime: 2023-05-10 12:11:30
+ * @LastEditors: cloudyi.li
+ * @FilePath: /chatserver-web/src/utils/format/index.ts
+ */
 /**
  * 转义 HTML 字符
  * @param source
@@ -41,4 +48,11 @@ export function copyText(options: { text: string; origin?: boolean }) {
   if (document.execCommand('copy'))
     document.execCommand('copy')
   document.body.removeChild(input)
+}
+
+export function myTrim(str: string) {
+  if (String.prototype.trim())
+    return str.trim()
+
+  return str.replace(/^\s+/, '').replace(/\s+$/, '')
 }

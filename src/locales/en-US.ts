@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-13 19:14:02
- * @LastEditTime: 2023-05-06 13:18:14
+ * @LastEditTime: 2023-05-10 16:00:24
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/locales/en-US.ts
  */
@@ -39,6 +39,7 @@ export default {
     usernameplaceholder: 'Please enter user name',
     passwordplaceholder: 'Please enter passowd',
     unauthorizedTips: 'The user is not logged in or the login has expired, please log in first',
+    registerSuccess: 'Thank you very much for registering! Your account has been successfully created. Please note that we have sent a verification email to the email address you provided during registration. To ensure that you can use our services normally, please check your email as soon as possible and click on the link in the email to complete the verification process. If you have not received the email, please check your spam folder first, as the email may have been mistakenly classified as spam. If you still haven\'t received the email, please contact our customer service team. Thank you again for registering, and we wish you a pleasant experience using our services!',
   },
   chat: {
     newChatButton: 'New Chat',
