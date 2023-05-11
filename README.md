@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:04:10
- * @LastEditTime: 2023-05-11 14:16:55
+ * @LastEditTime: 2023-05-11 14:21:45
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/README.md
 -->
@@ -10,7 +10,7 @@
 
 *<u>本项目前端Fork自项目[Chanzhaoyu](https://github.com/Chanzhaoyu)/**[chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web)**</u>*
 
-本仓库为前端代码，依赖的后端仓库为[wooveep](https://github.com/wooveep)/**[chatserver-api](https://github.com/wooveep/chatserver-api)**使用Golang语言编写
+本仓库为前端代码，依赖的后端仓库为[wooveep](https://github.com/wooveep)/[chatserver-api](https://github.com/wooveep/chatserver-api)使用Golang语言编写
 ## 系统演示
 ![操作演示](docs/操作演示.gif)
 ## 项目截图
