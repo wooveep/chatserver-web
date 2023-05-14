@@ -5,20 +5,18 @@ RUN npm install pnpm -g
 
 WORKDIR /app
 
-COPY ../package.json /app
+COPY ./package.json /app
 
-COPY ../pnpm-lock.yaml /app
+COPY ./pnpm-lock.yaml /app
 
 RUN pnpm install
 
-COPY ../ /app
+COPY . /app
 
 RUN pnpm run build
 
 # service
 FROM nginx:alpine
-
-RUN npm install pnpm -g
 
 WORKDIR /app
 
@@ -27,7 +25,9 @@ COPY ./nginx.template /etc/nginx/conf.d
 # 将 shell copy 到 workdir 目录，此处为 /opt
 # COPY ./main.sh /opt
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /app
+
+VOLUME ["/app/head_photo","/app/certificate"]
 
 EXPOSE 80 
 EXPOSE 443 
