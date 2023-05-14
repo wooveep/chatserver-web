@@ -1,3 +1,10 @@
+/*
+ * @Author: cloudyi.li
+ * @Date: 2023-05-14 10:14:15
+ * @LastEditTime: 2023-05-14 11:34:03
+ * @LastEditors: cloudyi.li
+ * @FilePath: \chatserver-web\vite.config.ts
+ */
 import path from 'path'
 import type { PluginOption } from 'vite'
 import { defineConfig, loadEnv } from 'vite'
@@ -11,8 +18,8 @@ function setupPlugins(env: ImportMetaEnv): PluginOption[] {
     VitePWA({
       injectRegister: 'auto',
       manifest: {
-        name: 'WhatServer',
-        short_name: 'WhatServer',
+        name: 'ChatServer',
+        short_name: 'ChatServer',
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
