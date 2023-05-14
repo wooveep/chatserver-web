@@ -1,15 +1,8 @@
 server {
     listen    80;
-    listen       443 ssl;
     server_name $WEB_URL;
     # 引入定义变量指令的文件
     #include /etc/nginx/conf.d/*.variable;
-    ssl_certificate     /app/certificate/server.crt;
-    ssl_certificate_key   /app/certificate/server.key;
-    ssl_session_timeout 30m;
-    ssl_protocols TLSv1.2;
-    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-
-    ssl_prefer_server_ciphers off;
     root   /app;
 
     charset utf-8;
@@ -26,6 +19,7 @@ server {
                 proxy_set_header X-Forwa-For $proxy_add_x_forwarded_for;
                 proxy_pass http://$Back_IP:18080/;
     }
+   error_page   500 502 503 504  /50x.html;
 
 }
 
@@ -46,20 +40,21 @@ server {
 #   ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-
 #   ssl_prefer_server_ciphers off;
 #     #access_log  /var/log/nginx/host.access.log  main;
-#     root   /usr/share/nginx/html;
-#     location / {
-#         index  index.html index.htm;
-#     }
-#     location /api/ {
-#                 proxy_redirect off;
-#                 proxy_buffering off;
-#                 proxy_set_header Host $host;
-#                 proxy_set_header X-Real-IP $remote_addr;
-#                 proxy_set_header X-Forwa-For $proxy_add_x_forwarded_for;
-#                 proxy_pass http://127.0.0.1:18080/;
-#     }
-#     #error_page  404              /404.html;
-#     # redirect server error pages to the static page /50x.html
-#     #
+#   root   /app;
+#
+#   charset utf-8;
+#
+#   location / {
+#      index  index.html index.htm;
+#
+#   }
+#   location /api/ {
+#               proxy_redirect off;
+#               proxy_buffering off;
+#               proxy_set_header Host $host;
+#               proxy_set_header X-Real-IP $remote_addr;
+#               proxy_set_header X-Forwa-For $proxy_add_x_forwarded_for;
+#               proxy_pass http://$Back_IP:18080/;
+#   }
 #     error_page   500 502 503 504  /50x.html;
 # }
