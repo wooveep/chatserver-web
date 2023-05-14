@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-05-10 12:13:48
+ * @LastEditTime: 2023-05-12 00:25:43
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Permission.vue
 -->
@@ -21,18 +21,22 @@ import type {
   FormInst,
   FormRules,
 } from 'naive-ui'
+import { useRouter } from 'vue-router'
+import { useChat } from '../hooks/useChat'
 import { useAuthStore } from '@/store'
 import Icon403 from '@/icons/403.vue'
 import { fetchLogin } from '@/api'
 import type { UserLoginReq, UserLoginRes } from '@/models'
 import { myTrim } from '@/utils/format'
 import { CryptoPassword } from '@/utils/crypto'
+defineProps<Props>()
+const { fetchChatHistoryList, resetChat } = useChat()
+
+const router = useRouter()
 
 interface Props {
   visible: boolean
 }
-
-defineProps<Props>()
 
 // const router = useRouter()
 const authStore = useAuthStore()
@@ -65,7 +69,9 @@ async function handleLoginButtonClick() {
 
     await authStore.setToken(result.data.token, result.data.expire_at)
     message.success('success')
-    window.location.reload()
+    router.push('/')
+    resetChat()
+    await fetchChatHistoryList()
   }
   catch (error: any) {
     message.error(error.message)

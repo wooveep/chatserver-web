@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-20 18:57:17
- * @LastEditTime: 2023-05-06 22:26:24
+ * @LastEditTime: 2023-05-12 09:18:22
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/PresetStore/index.vue
 -->
@@ -40,12 +40,13 @@ const show = computed({
   },
 })
 
-function updateActivePreset(UUID: string) {
-  presetStore.setActive(UUID)
-  // 访问更新会话Preset ID接口
-  // 更新chatstore中的preset值
-}
+// function updateActivePreset(UUID: string) {
+//   presetStore.setActive(UUID)
+//   // 访问更新会话Preset ID接口
+//   // 更新chatstore中的preset值
+// }
 async function updateChatpreset() {
+  presetStore.setActive(checkPreset.value)
   const result = await fetchChatClear({ chat_id: chatStore.active })
   if (result.err_code === 0)
     chatStore.clearChatByUuid(chatStore.active)
@@ -65,7 +66,7 @@ onMounted(() => {
   <NModal v-model:show="show" :auto-focus="false" preset="card" style="width: 95%; max-width: 640px">
     <NCard role="dialog" aria-modal="true" :title="$t('setting.sotre_title')" :bordered="false" style="width: 100%; max-width: 640px;">
       <div class="flex flex-wrap items-center gap-4">
-        <NRadioGroup v-model:value="checkPreset" name="radiobuttongroup1" size="large" @update-value="updateActivePreset">
+        <NRadioGroup v-model:value="checkPreset" name="radiobuttongroup1" size="large">
           <NSpace vertical>
             <NRadioButton
               v-for="preset in currentPreset" :key="preset.preset_id"

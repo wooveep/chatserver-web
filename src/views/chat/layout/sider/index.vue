@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-11 10:37:59
+ * @LastEditTime: 2023-05-12 09:16:46
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/index.vue
 -->
@@ -25,6 +25,7 @@ const presetStore = usePresetStore()
 const { isMobile } = useBasicLayout()
 // const show = ref(false)
 const chatStore = useChatStore()
+const { fetchChatUUIDNew } = useChat()
 
 const collapsed = computed(() => appStore.siderCollapsed)
 const { addHistory } = useChat()
@@ -89,7 +90,8 @@ async function handleDelete(event?: MouseEvent | TouchEvent) {
     chatStore.resetChatState()
   if (isMobile.value)
     appStore.setSiderCollapsed(true)
-  window.location.reload()
+  // window.location.reload()
+  await fetchChatUUIDNew()
   router.push('/')
 }
 
