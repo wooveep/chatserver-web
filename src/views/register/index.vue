@@ -16,7 +16,7 @@ import {
   NInput,
   useMessage,
 } from 'naive-ui'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import type { UserRegisterReq, UserRegisterRes, UserVerifyEmailReq, UserVerifyRes, UserVerifyUserNameReq } from '@/models'
 import { fetchRegister, fetchVerifyEmail, fetchVerifyUsername } from '@/api'
 import { CryptoPassword } from '@/utils/crypto'
@@ -29,6 +29,7 @@ interface ModelType {
   password: string | null
   reenteredPassword: string | null
 }
+const route = useRoute()
 const formRef = ref<FormInst | null>(null)
 const router = useRouter()
 const rPasswordFormItemRef = ref<FormItemInst | null>(null)
@@ -44,7 +45,9 @@ const user = ref<UserRegisterReq>({
   username: null,
   email: null,
   password: null,
+  invite_code: null,
 })
+const { invitecode } = route.params as { invitecode: string }
 
 const verifyusername = ref<UserVerifyUserNameReq>({
   username: null,
@@ -173,15 +176,21 @@ function handlePasswordInput() {
     rPasswordFormItemRef.value?.validate({ trigger: 'password-input' })
 }
 async function handleRegisterButtonClick(e: MouseEvent) {
+  if (msgReactive) {
+    msgReactive.destroy()
+    msgReactive = null
+  }
   msgReactive = message.create('正在注册,请等待', {
     type: types[4],
-    duration: 1000000,
+    closable: true,
+    duration: 0,
   })
   e.preventDefault()
   try {
     user.value.username = modelRef.value.username
     user.value.email = modelRef.value.email
     user.value.password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
+    user.value.invite_code = invitecode
     const result = await fetchRegister<UserRegisterRes>(user.value)
     const isSuccess = result.data.is_success
     if (isSuccess) {
@@ -198,7 +207,7 @@ async function handleRegisterButtonClick(e: MouseEvent) {
   catch (error: any) {
     if (msgReactive) {
       msgReactive.type = types[3]
-      msgReactive.content = `${error.message}\n${t('common.registerSuccess')}`
+      msgReactive.content = `${error.message}\n${t('common.registerFail')}`
     }
     modelRef.value.password = ''
     modelRef.value.reenteredPassword = ''

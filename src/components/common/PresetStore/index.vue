@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-20 18:57:17
- * @LastEditTime: 2023-05-12 09:18:22
+ * @LastEditTime: 2023-05-22 13:22:01
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/PresetStore/index.vue
 -->
@@ -64,7 +64,7 @@ onMounted(() => {
 
 <template>
   <NModal v-model:show="show" :auto-focus="false" preset="card" style="width: 95%; max-width: 640px">
-    <NCard role="dialog" aria-modal="true" :title="$t('setting.sotre_title')" :bordered="false" style="width: 100%; max-width: 640px;">
+    <NCard role="dialog" aria-modal="true" :title="$t('store.title')" :bordered="false" style="width: 100%; max-width: 640px;">
       <div class="flex flex-wrap items-center gap-4">
         <NRadioGroup v-model:value="checkPreset" name="radiobuttongroup1" size="large">
           <NSpace vertical>
@@ -81,11 +81,10 @@ onMounted(() => {
       <div class="flex flex-wrap items-center gap-4">
         <span class="flex-shrink-0 w-[100px]" />
         <div class="text-gray-500">
-          请点击“确定”按钮切换AI助手的角色，切换后将会清空当前会话内容。
-          建议新建会话切换角色。
+          {{ $t('store.description') }}
         </div>
         <NButton type="primary" @click="updateChatpreset">
-          确定
+          {{ $t('common.confirm') }}
         </NButton>
       </div>
     </NCard>

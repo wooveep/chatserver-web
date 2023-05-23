@@ -1,11 +1,11 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-23 17:03:30
+ * @LastEditTime: 2023-05-22 12:25:38
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/Footer.vue
 -->
-<script setup lang='ts'>
+<script lang='ts' setup>
 import { defineAsyncComponent, ref } from 'vue'
 import { HoverButton, SvgIcon, UserAvatar } from '@/components/common'
 

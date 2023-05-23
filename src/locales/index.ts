@@ -1,15 +1,22 @@
+/*
+ * @Author: cloudyi.li
+ * @Date: 2023-03-23 13:51:37
+ * @LastEditTime: 2023-05-22 11:57:15
+ * @LastEditors: cloudyi.li
+ * @FilePath: /chatserver-web/src/locales/index.ts
+ */
 import type { App } from 'vue'
 import { createI18n } from 'vue-i18n'
 import enUS from './en-US'
-import koKR from './ko-KR'
+// import koKR from './ko-KR'
 import zhCN from './zh-CN'
-import zhTW from './zh-TW'
+// import zhTW from './zh-TW'
 import { useAppStoreWithOut } from '@/store/modules/app'
 import type { Language } from '@/store/modules/app/helper'
 
 const appStore = useAppStoreWithOut()
 
-const defaultLocale = appStore.language || 'zh-CN'
+const defaultLocale = appStore.getLanguage || 'zh-CN'
 
 const i18n = createI18n({
   locale: defaultLocale,
@@ -17,9 +24,9 @@ const i18n = createI18n({
   allowComposition: true,
   messages: {
     'en-US': enUS,
-    'ko-KR': koKR,
+    // 'ko-KR': koKR,
     'zh-CN': zhCN,
-    'zh-TW': zhTW,
+    // 'zh-TW': zhTW,
   },
 })
 

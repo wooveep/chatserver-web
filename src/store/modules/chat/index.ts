@@ -54,6 +54,7 @@ export const useChatStore = defineStore('chat-store', {
       this.chat.unshift({ uuid: history.uuid, data: chatData })
       this.active = history.uuid
       this.reloadRoute(history.uuid)
+      this.recordState()
     },
 
     updateHistory(uuid: string, edit: Partial<Chat.History>) {

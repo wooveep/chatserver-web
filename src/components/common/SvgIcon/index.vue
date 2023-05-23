@@ -1,4 +1,11 @@
-<script setup lang='ts'>
+<!--
+ * @Author: cloudyi.li
+ * @Date: 2023-03-23 13:51:37
+ * @LastEditTime: 2023-05-22 12:25:23
+ * @LastEditors: cloudyi.li
+ * @FilePath: /chatserver-web/src/components/common/SvgIcon/index.vue
+-->
+<script lang='ts' setup>
 import { computed, useAttrs } from 'vue'
 import { Icon } from '@iconify/vue'
 

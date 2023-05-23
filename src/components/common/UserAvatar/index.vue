@@ -1,18 +1,17 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-14 09:52:13
- * @LastEditTime: 2023-05-06 22:21:15
+ * @LastEditTime: 2023-05-22 13:13:29
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/UserAvatar/index.vue
 -->
 <script setup lang='ts'>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { NAvatar, NButton, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { SvgIcon } from '@/components/common'
 import { useAuthStore, useChatStore, useUserStore } from '@/store'
 import defaultAvatar from '@/assets/avatar.jpg'
-import { isString } from '@/utils/is'
 import { fetchLogOut } from '@/api'
 const router = useRouter()
 const authStore = useAuthStore()
@@ -20,8 +19,8 @@ const chatStore = useChatStore()
 const message = useMessage()
 const userStore = useUserStore()
 
-const userInfo = computed(() => userStore.userInfo)
-
+const userNickname = computed(() => userStore.nickname)
+const userAvatar = computed(() => userStore.getUserAvatar)
 async function handleLogoutButtonClick(e: MouseEvent) {
   e.preventDefault()
   try {
@@ -37,16 +36,22 @@ async function handleLogoutButtonClick(e: MouseEvent) {
     message.error(error.message)
   }
 }
+const needPermission = computed(() => !authStore.token)
+
+onMounted(async () => {
+  if (!needPermission.value)
+    await userStore.setUserAvatar()
+})
 </script>
 
 <template>
   <div class="flex items-center overflow-hidden">
     <div class="w-15 h-15 overflow-hidden rounded-full grow-1 shrink-1 basis-auto">
-      <template v-if="isString(userInfo.avatar_url) && userInfo.avatar_url.length > 0">
+      <template v-if="userAvatar">
         <NAvatar
           size="large"
           round
-          :src="userInfo.avatar_url"
+          :src="userAvatar"
           :fallback-src="defaultAvatar"
         />
       </template>
@@ -56,7 +61,7 @@ async function handleLogoutButtonClick(e: MouseEvent) {
     </div>
     <div class="flex-1 min-w-0 ml-2">
       <h2 class="overflow-hidden font-bold text-lg text-ellipsis whitespace-nowrap">
-        {{ userInfo.nickname }}
+        {{ userNickname }}
       </h2>
       <!-- <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
         <span
@@ -72,7 +77,7 @@ async function handleLogoutButtonClick(e: MouseEvent) {
           <SvgIcon icon="ri:logout-box-r-line" />
         </span>
         <h4 class="overflow-hidden text-gray-500  text-md text-ellipsis whitespace-nowrap">
-          退出
+          {{ $t('user.logout') }}
         </h4>
       </NButton>
     </div>

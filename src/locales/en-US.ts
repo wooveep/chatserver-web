@@ -1,11 +1,40 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-13 19:14:02
- * @LastEditTime: 2023-05-10 16:00:24
+ * @LastEditTime: 2023-05-22 13:21:57
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/locales/en-US.ts
  */
 export default {
+  user: {
+    register_link: 'Don\'t have an account yet? Click Register',
+    passinput: 'Please enter password',
+    passinputregx: 'The password contains at least one digit, one lowercase letter, and one uppercase letter',
+    passinputagain: 'Please enter your password again',
+    confirmpasserr: 'Two password inconsistencies',
+    currpassholder: 'Please enter the current password',
+    newpassholder: 'Please enter a new password',
+    repnewpassholder: 'Please enter the new password again',
+    oldpasswd: 'Old Password',
+    newpasswd: 'New Password',
+    confirmpasswd: 'Confirm Password',
+    confirm: 'Confirm',
+    logout: 'Log Out',
+  },
+  giftcard: {
+    cdkeyinput: 'CDKEY Verify',
+    cdkey: 'KEY',
+    cdkeyplaceholder: 'Please Enter CDKEY',
+    cdkeycheck: 'Verify',
+    buylink: 'Buy Link',
+    buy: 'Click To Buy',
+  },
+  invite: {
+    title: 'Invite your friends and get 5 points each',
+    number: 'Invited',
+    reward: 'Awarded',
+    link: 'Invitation link',
+  },
   common: {
     add: 'Add',
     addSuccess: 'Add Success',
@@ -38,7 +67,10 @@ export default {
     password: 'Password',
     usernameplaceholder: 'Please enter user name',
     passwordplaceholder: 'Please enter passowd',
+    // upassok: '密码修改成功,请重新登录',
+    // upassfail: '密码修改失败',
     unauthorizedTips: 'The user is not logged in or the login has expired, please log in first',
+    registerFail: 'sdfsdfa',
     registerSuccess: 'Thank you very much for registering! Your account has been successfully created. Please note that we have sent a verification email to the email address you provided during registration. To ensure that you can use our services normally, please check your email as soon as possible and click on the link in the email to complete the verification process. If you have not received the email, please check your spam folder first, as the email may have been mistakenly classified as spam. If you still haven\'t received the email, please contact our customer service team. Thank you again for registering, and we wish you a pleasant experience using our services!',
   },
   chat: {
@@ -68,16 +100,21 @@ export default {
     setting: 'Setting',
     general: 'General',
     advanced: 'Advanced',
+    password: 'Password',
     config: 'Config',
     avatar: 'Avatar',
+    recharge: 'Recharge',
+    invite: 'Invite',
     avatarLink: 'Avatar Link',
     name: 'Name',
     username: 'User Name',
     nickname: 'Nick Name',
     email: 'Email Address',
     expireat: 'Expiration Date',
+    userrole: 'User Role',
     balance: 'Account Balance',
     description: 'Description',
+    modifypass: 'Modify Password',
     role: 'Role',
     temperature: 'Temperature',
     top_p: 'Top_p',
@@ -101,14 +138,13 @@ export default {
     chatgpt_memory_mobile_choice_1: 'Normal',
     chatgpt_memory_mobile_choice_2: 'Medium',
     chatgpt_memory_mobile_choice_3: 'Strong',
-    sotreTitle: 'AI Role Prompt Store',
   },
   store: {
     siderButton: 'Prompt Store',
     local: 'Local',
     online: 'Online',
-    title: 'Title',
-    description: 'Description',
+    description: 'Please click "OK" button to switch the role of a and i assistant. After switching, the current session content will be cleared. You are advised to create a session switchover role.',
+    title: 'AI Role Prompt Store',
     clearStoreConfirm: 'Whether to clear the data?',
     importPlaceholder: 'Please paste the JSON data here',
     addRepeatTitleTips: 'Title duplicate, please re-enter',

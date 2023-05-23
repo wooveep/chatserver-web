@@ -1,9 +1,9 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-14 16:31:30
+ * @LastEditTime: 2023-05-22 12:14:05
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/main.ts
+ * @FilePath: /chatserver-web/src/main.ts
  */
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -14,10 +14,10 @@ import { setupRouter } from './router'
 
 async function bootstrap() {
   const app = createApp(App)
+  setupStore(app)
+
   setupAssets()
   setupScrollbarStyle()
-
-  setupStore(app)
 
   setupI18n(app)
 

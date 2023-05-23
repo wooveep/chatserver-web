@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import type { Ref } from 'vue'
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router'
 import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
@@ -35,7 +35,7 @@ const regenreq = ref<ChatRegenerategReq>({
 
 })
 
-const route = useRoute()
+// const route = useRoute()
 const dialog = useDialog()
 const ms = useMessage()
 const authStore = useAuthStore()
@@ -56,8 +56,8 @@ const { addChat, updateChat, updateChatSome } = useChat()
 const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom } = useScroll()
 const { usingMemory, toggleUsingContext } = useMemoryLevel()
 
-const { chat_uuid } = route.params as { chat_uuid: string }
-
+// let { chat_uuid } = route.params as { chat_uuid: string }
+const chat_uuid = computed(() => chatStore.getActiveUuid).value
 const dataSources = computed(() => chatStore.getChatByUuid(chat_uuid))
 const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActive)
 const currentPresetName = computed(() => presetStore.getPresetNameByActive ?? '')

@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-05-12 00:25:43
+ * @LastEditTime: 2023-05-22 11:29:14
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Permission.vue
 -->
@@ -138,7 +138,7 @@ function handlePress(event: KeyboardEvent) {
           </NButton>
         </NForm>
         <div class="login-signup">
-          <a href="#/register">还没有账号? 点击注册</a>
+          <a href="#/register">{{ $t('user.register_link') }}</a>
         </div>
       </div>
     </div>

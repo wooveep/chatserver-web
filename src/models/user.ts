@@ -1,9 +1,9 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-15 18:18:20
- * @LastEditTime: 2023-04-16 17:52:22
+ * @LastEditTime: 2023-05-21 23:03:11
  * @LastEditors: cloudyi.li
- * @FilePath: /whatserver-web/src/models/user.ts
+ * @FilePath: /chatserver-web/src/models/user.ts
  */
 /**
  *
@@ -69,6 +69,12 @@ export interface UserRegisterReq {
      * @memberof UserRegisterReq
      */
   password: string | null
+  /**
+     *
+     * @type {string}
+     * @memberof UserRegisterReq
+     */
+  invite_code: string | null
 }
 /**
    *
@@ -125,17 +131,175 @@ export interface UserVerifyRes {
 }
 
 /**
+   *
+   * @export
+   * @interface UserInviteLinkRes
+   */
+export interface UserInviteLinkRes {
+  /**
+      *
+      * @type {string}
+      * @memberof UserInviteLinkRes
+      */
+  invite_link: string
+  /**
+      *
+      * @type {number}
+      * @memberof UserInviteLinkRes
+      */
+  invite_number: number
+  /**
+      *
+      * @type {number}
+      * @memberof UserInviteLinkRes
+      */
+  invite_reward: number
+}
+
+/**
+   *
+   * @export
+   * @interface UserCdkeyPayReq
+   */
+export interface UserCdkeyPayReq {
+  /**
+       *
+       * @type {string}
+       * @memberof UserCdkeyPayReq
+       */
+  code_key: string | null
+}
+/**
+   *
+   * @export
+   * @interface UserGiftCardRes
+   */
+export interface UserGiftCardRes {
+  /**
+        *
+        * @type {UserGiftCard}
+        * @memberof UserGiftCardRes
+        */
+  card_list: Array<UserGiftCard> | undefined
+}
+
+/**
+   *
+   * @export
+   * @interface UserGiftCard
+   */
+export interface UserGiftCard {
+  /**
+        *
+        * @type {string}
+        * @memberof UserGiftCard
+        */
+  card_id: string | null
+  /**
+        *
+        * @type {string}
+        * @memberof UserGiftCard
+        */
+  card_name: string | null
+  /**
+        *
+        * @type {string}
+        * @memberof UserGiftCard
+        */
+  card_comment: string | null
+  /**
+        *
+        * @type {string}
+        * @memberof UserGiftCard
+        */
+  card_discount: number | null
+  /**
+        *
+        * @type {string}
+        * @memberof UserGiftCard
+        */
+  card_amount: number | null
+  /**
+        *
+        * @type {string}
+        * @memberof UserGiftCard
+        */
+  card_link: string | null
+}
+
+/**
+   *
+   * @export
+   * @interface UserUpadatePasswordReq
+   */
+export interface UserUpadatePasswordReq {
+  /**
+        *
+        * @type {string}
+        * @memberof UserUpadatePasswordReq
+        */
+  new_password: string | null
+  /**
+        *
+        * @type {string}
+        * @memberof UserUpadatePasswordReq
+        */
+  old_password: string | null
+}
+/**
+   *
+   * @export
+   * @interface UserResetPasswordReq
+   */
+export interface UserResetPasswordReq {
+  /**
+         *
+         * @type {string}
+         * @memberof UserResetPasswordReq
+         */
+  new_password: string
+  /**
+         *
+         * @type {string}
+         * @memberof UserResetPasswordReq
+         */
+  temp_code: string
+}
+
+/**
+   *
+   * @export
+   * @interface UserForgetPasswordReq
+   */
+export interface UserForgetPasswordReq {
+  /**
+         *
+         * @type {string}
+         * @memberof UserForgetPasswordReq
+         */
+  email: string
+}
+
+/**
+ *
+ * @export
+ * @interface UserAvatarRes
+ */
+export interface UserAvatarRes {
+  /**
+       *
+       * @type {string}
+       * @memberof UserAvatarRes
+       */
+  avatar: string
+}
+
+/**
  *
  * @export
  * @interface UserInfoRes
  */
 export interface UserInfoRes {
-  /**
-       *
-       * @type {string}
-       * @memberof UserInfoRes
-       */
-  avatar_url: string
   /**
        *
        * @type {number}
@@ -171,5 +335,5 @@ export interface UserInfoRes {
        * @type {string}
        * @memberof UserInfoRes
        */
-  expired_at: string
+  role: string
 }

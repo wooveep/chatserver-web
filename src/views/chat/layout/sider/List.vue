@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script lang='ts' setup>
 import { computed } from 'vue'
 import { NInput, NPopconfirm, NScrollbar } from 'naive-ui'
 import { SvgIcon } from '@/components/common'

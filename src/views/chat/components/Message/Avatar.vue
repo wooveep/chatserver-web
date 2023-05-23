@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-10 21:20:57
+ * @LastEditTime: 2023-05-21 22:24:49
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/components/Message/Avatar.vue
 -->
@@ -9,7 +9,6 @@
 import { computed } from 'vue'
 import { NAvatar } from 'naive-ui'
 import { useUserStore } from '@/store'
-import { isString } from '@/utils/is'
 import defaultAvatar from '@/assets/avatar.jpg'
 
 interface Props {
@@ -19,12 +18,12 @@ defineProps<Props>()
 
 const userStore = useUserStore()
 
-const avatar = computed(() => userStore.userInfo.avatar_url)
+const avatar = computed(() => userStore.getUserAvatar)
 </script>
 
 <template>
   <template v-if="image">
-    <NAvatar v-if="isString(avatar) && avatar.length > 0" :src="avatar" :fallback-src="defaultAvatar" />
+    <NAvatar v-if="avatar" :src="avatar" :fallback-src="defaultAvatar" />
     <NAvatar v-else round :src="defaultAvatar" />
   </template>
   <span v-else class="text-[28px] dark:text-white">

@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:04:10
- * @LastEditTime: 2023-05-11 14:21:45
+ * @LastEditTime: 2023-05-22 13:29:34
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/README.md
 -->
@@ -49,6 +49,10 @@
 - [x] 多会话储存和上下文逻辑
 - [x] 支持流式回复打字机效果
 - [x] 支持按照Token计费
+- [x] 基于卡密方式的用户额度充值
+- [x] 用户角色权限管理
+- [x] 支持Azure API
+- [x] 支持Azure内容过滤
 
 ## 应用场景
 
@@ -170,11 +174,9 @@ docker  run   -p 18088:80 -e "WEB_URL=域名" -e "Back_IP=后端APIIP地址"    
 
 ## 待实现列表
 
-- [ ] 基于卡密方式的用户额度充值
 - [ ] 系统后台管理界面
 - [ ] 用户系统设置模块
 - [ ] 自定义敏感词
-- [ ] 用户角色权限管理
 - [ ] 自定义AI角色页面
 - [ ] 本地文档向量化操作页面
 - [ ] 语音问答

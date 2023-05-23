@@ -1,7 +1,14 @@
+<!--
+ * @Author: cloudyi.li
+ * @Date: 2023-03-23 13:51:37
+ * @LastEditTime: 2023-05-19 15:17:28
+ * @LastEditors: cloudyi.li
+ * @FilePath: /chatserver-web/src/components/common/Setting/About.vue
+-->
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { NSpin } from 'naive-ui'
-import { fetchChatConfig } from '@/api'
+// import { fetchChatConfig } from '@/api'
 import pkg from '@/../package.json'
 
 interface ConfigState {
@@ -15,20 +22,20 @@ const loading = ref(false)
 
 const config = ref<ConfigState>()
 
-async function fetchConfig() {
-  try {
-    loading.value = true
-    const { data } = await fetchChatConfig<ConfigState>()
-    config.value = data
-  }
-  finally {
-    loading.value = false
-  }
-}
+// async function fetchConfig() {
+//   try {
+//     loading.value = true
+//     const { data } = await fetchChatConfig<ConfigState>()
+//     config.value = data
+//   }
+//   finally {
+//     loading.value = false
+//   }
+// }
 
-onMounted(() => {
-  fetchConfig()
-})
+// onMounted(() => {
+//   fetchConfig()
+// })
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-10 17:00:31
+ * @LastEditTime: 2023-05-21 23:03:18
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/api/index.ts
  */
@@ -9,32 +9,23 @@ import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { get, hdelete, post, postEvent } from '@/utils/request'
 import type {
   ChatChattingReq, ChatClearReq, ChatCreateNewReq, ChatDeleteReq, ChatRecordHistoryReq, ChatRegenerategReq,
-  ChatUpdateReq, UserLoginReq, UserRegisterReq, UserRegisterRes,
+  ChatUpdateReq, UserCdkeyPayReq, UserForgetPasswordReq, UserLoginReq, UserRegisterReq, UserRegisterRes,
+  UserResetPasswordReq,
+  UserUpadatePasswordReq,
   UserVerifyEmailReq, UserVerifyRes,
   UserVerifyUserNameReq,
 } from '@/models'
 
-export function fetchChatAPI<T = any>(
-  prompt: string,
-  options?: { conversationId?: string; parentMessageId?: string },
-  signal?: GenericAbortSignal,
-) {
-  return post<T>({
-    url: '/chat',
-    data: { prompt, options },
-    signal,
-  })
-}
-
-export function fetchChatConfig<T = any>() {
-  return post<T>({
-    url: '/config',
-  })
-}
-
 export function fetchRegister<T = UserRegisterRes>(user: UserRegisterReq) {
   return post<T>({
     url: '/register',
+    data: user,
+  })
+}
+
+export function fetchLogin<UserLoginRes>(user: UserLoginReq) {
+  return post<UserLoginRes>({
+    url: '/login',
     data: user,
   })
 }
@@ -53,10 +44,24 @@ export function fetchVerifyEmail<T = UserVerifyRes>(email: UserVerifyEmailReq) {
   })
 }
 
-export function fetchLogin<UserLoginRes>(user: UserLoginReq) {
-  return post<UserLoginRes>({
-    url: '/login',
-    data: user,
+export function fetchForgetPassword<T = any>(fpassword: UserForgetPasswordReq) {
+  return post<T>({
+    url: '/forget',
+    data: fpassword,
+  })
+}
+
+export function fetchResetPassword<T = any>(rpassword: UserResetPasswordReq) {
+  return post<T>({
+    url: '/resetpassword',
+    data: rpassword,
+  })
+}
+
+export function fetchUserActive<T = any>(code: string) {
+  const getparams = `active_code=${code}`
+  return get<T>({
+    url: `/active?${getparams}`,
   })
 }
 
@@ -65,12 +70,13 @@ export function fetchUserInfo<UserInfoRes>() {
     url: '/user/info',
   })
 }
-export function fetchUserActive<T = any>(code: string) {
-  const getparams = `active_code=${code}`
-  return get<T>({
-    url: `/active?${getparams}`,
+
+export function fetchUserAvatar<UserAvatarRes>() {
+  return get<UserAvatarRes>({
+    url: '/user/avatar',
   })
 }
+
 export function fetchLogOut<T = any >() {
   return get<T>({
     url: '/user/logout',
@@ -83,9 +89,29 @@ export function fetchRefreshToken<UserLoginRes>() {
   })
 }
 
-export function fetchPresetList<PresetListRes>() {
-  return get<PresetListRes>({
-    url: '/preset/list',
+export function fetchInviteLink<UserInviteLinkRes>() {
+  return get<UserInviteLinkRes>({
+    url: '/user/invitelink',
+  })
+}
+
+export function fetchCardList<UserGiftCardRes>() {
+  return get<UserGiftCardRes>({
+    url: '/user/giftcard',
+  })
+}
+
+export function fetchCdkeyPay<T = any>(codekey: UserCdkeyPayReq) {
+  return post<T>({
+    url: '/user/cdkeypay',
+    data: codekey,
+  })
+}
+
+export function fetchUpadatePassword<T = any>(upassword: UserUpadatePasswordReq) {
+  return post<T>({
+    url: '/user/updatepassword',
+    data: upassword,
   })
 }
 
@@ -157,5 +183,11 @@ export function fetchChatRegen<T = any>(
     data: params.prompt,
     signal: params.signal,
     onDownloadProgress: params.onDownloadProgress,
+  })
+}
+
+export function fetchPresetList<PresetListRes>() {
+  return get<PresetListRes>({
+    url: '/preset/list',
   })
 }

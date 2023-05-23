@@ -110,7 +110,7 @@ function handlePress(event: KeyboardEvent) {
         </NButton>
       </NForm>
       <div class="login-signup">
-        <a href="#/register">还没有账号? 点击注册</a>
+        <a href="#/register">{{ $t('user.register_link') }}</a>
       </div>
     </NCard>
     <div class="login-footer">

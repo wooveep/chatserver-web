@@ -1,11 +1,11 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-12 09:16:46
+ * @LastEditTime: 2023-05-22 12:25:42
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/index.vue
 -->
-<script setup lang='ts'>
+<script lang='ts' setup>
 import type { CSSProperties } from 'vue'
 import { computed, ref, watch } from 'vue'
 import { NButton, NLayoutSider, NPopconfirm } from 'naive-ui'
@@ -18,7 +18,7 @@ import { SvgIcon } from '@/components/common'
 import type { ChatCreateNewReq, ChatCreateNewRes } from '@/models'
 import { fetchChatCreateNew, fetchChatDelete } from '@/api'
 import { debounce } from '@/utils/functions/debounce'
-import { router } from '@/router'
+// import { router } from '@/router'
 
 const appStore = useAppStore()
 const presetStore = usePresetStore()
@@ -86,13 +86,14 @@ watch(
 async function handleDelete(event?: MouseEvent | TouchEvent) {
   event?.stopPropagation()
   const result = await fetchChatDelete({ chat_id: '-1' })
-  if (result.err_code === 0)
+  if (result.err_code === 0) {
     chatStore.resetChatState()
+    await fetchChatUUIDNew()
+  }
   if (isMobile.value)
     appStore.setSiderCollapsed(true)
-  // window.location.reload()
-  await fetchChatUUIDNew()
-  router.push('/')
+  window.location.reload()
+  // router.push('/')
 }
 
 const handleDeleteDebounce = debounce(handleDelete, 600)
