@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-21 22:41:04
+ * @LastEditTime: 2023-05-24 20:17:11
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/router/index.ts
  */
@@ -40,11 +40,20 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/register/index.vue'),
   },
   {
+    path: '/forgetpassword',
+    name: 'forgetpassword',
+    component: () => import('@/views/password/forget.vue'),
+  },
+  {
+    path: '/resetpassword/:tempcode?',
+    name: 'resetpassword',
+    component: () => import('@/views/password/reset.vue'),
+  },
+  {
     path: '/403',
     name: '403',
     component: () => import('@/views/exception/403/index.vue'),
   },
-
   {
     path: '/404',
     name: '404',

@@ -1,12 +1,12 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 15:31:53
- * @LastEditTime: 2023-05-22 09:21:32
+ * @LastEditTime: 2023-05-24 21:32:57
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/store/modules/auth/index.ts
  */
 import { defineStore } from 'pinia'
-import { getTime, getToken, removeToken, setToken } from './helper'
+import { getExprieTime, getToken, removeToken, setToken } from './helper'
 import { store, useUserStore } from '@/store'
 
 export interface AuthState {
@@ -17,7 +17,7 @@ export interface AuthState {
 export const useAuthStore = defineStore('auth-store', {
   state: (): AuthState => ({
     token: getToken(),
-    time: getTime(),
+    time: getExprieTime(),
   }),
   getters: {
     getTokenTime(state: AuthState) {
@@ -25,10 +25,13 @@ export const useAuthStore = defineStore('auth-store', {
     },
   },
   actions: {
-    async setToken(token: string, expire_at: string) {
+    async setToken(token: string, timeout: number) {
       removeToken()
       this.token = token
-      setToken(token, new Date(expire_at).getTime())
+      const currentDate = new Date()
+      const timestamp = currentDate.getTime() + timeout
+      this.time = timestamp
+      setToken(token, timestamp)
       const userStore = useUserStore()
       await userStore.setUserInfo()
       await userStore.setUserAvatar()

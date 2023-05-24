@@ -1,10 +1,24 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-15 18:18:20
- * @LastEditTime: 2023-05-21 23:03:11
+ * @LastEditTime: 2023-05-24 21:25:56
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/models/user.ts
  */
+
+/**
+ *
+ * @export
+ * @interface CaptChaRes
+ */
+export interface CaptChaRes {
+  /**
+        *
+        * @type {string}
+        * @memberof CaptChaRes
+        */
+  image: string
+}
 /**
  *
  * @export
@@ -23,6 +37,12 @@ export interface UserLoginReq {
        * @memberof UserLoginReq
        */
   password: string | null
+  /**
+       *
+       * @type {string}
+       * @memberof UserLoginReq
+       */
+  captcha: string | null
 }
 
 /**
@@ -39,10 +59,10 @@ export interface UserLoginRes {
   token: string
   /**
        *
-       * @type {string}
+       * @type {number}
        * @memberof UserLoginRes
        */
-  expire_at: string
+  timeout: number
 }
 
 /**
@@ -75,6 +95,14 @@ export interface UserRegisterReq {
      * @memberof UserRegisterReq
      */
   invite_code: string | null
+
+  /**
+       *
+       * @type {string}
+       * @memberof UserRegisterReq
+       */
+  captcha: string | null
+
 }
 /**
    *
@@ -257,13 +285,13 @@ export interface UserResetPasswordReq {
          * @type {string}
          * @memberof UserResetPasswordReq
          */
-  new_password: string
+  new_password: string | null
   /**
          *
          * @type {string}
          * @memberof UserResetPasswordReq
          */
-  temp_code: string
+  temp_code: string | null
 }
 
 /**
@@ -277,7 +305,14 @@ export interface UserForgetPasswordReq {
          * @type {string}
          * @memberof UserForgetPasswordReq
          */
-  email: string
+  email: string | null
+
+  /**
+       *
+       * @type {string}
+       * @memberof UserForgetPasswordReq
+       */
+  captcha: string | null
 }
 
 /**

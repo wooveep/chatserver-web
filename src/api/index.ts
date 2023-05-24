@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-21 23:03:18
+ * @LastEditTime: 2023-05-24 12:05:51
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/api/index.ts
  */
@@ -27,6 +27,12 @@ export function fetchLogin<UserLoginRes>(user: UserLoginReq) {
   return post<UserLoginRes>({
     url: '/login',
     data: user,
+  })
+}
+
+export function fetchCaptCha<CaptChaRes>() {
+  return get<CaptChaRes>({
+    url: '/captcha',
   })
 }
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type {
   FormInst,
   FormItemInst,
@@ -9,16 +9,16 @@ import type {
   MessageType,
 } from 'naive-ui'
 import {
-
-  NButton, NCard,
-  NForm,
+  NButton,
+  NCard, NForm,
   NFormItem,
+  NImage,
   NInput,
   useMessage,
 } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
-import type { UserRegisterReq, UserRegisterRes, UserVerifyEmailReq, UserVerifyRes, UserVerifyUserNameReq } from '@/models'
-import { fetchRegister, fetchVerifyEmail, fetchVerifyUsername } from '@/api'
+import type { CaptChaRes, UserRegisterReq, UserRegisterRes, UserVerifyEmailReq, UserVerifyRes, UserVerifyUserNameReq } from '@/models'
+import { fetchCaptCha, fetchRegister, fetchVerifyEmail, fetchVerifyUsername } from '@/api'
 import { CryptoPassword } from '@/utils/crypto'
 import { myTrim } from '@/utils/format'
 import { t } from '@/locales'
@@ -28,17 +28,20 @@ interface ModelType {
   email: string | null
   password: string | null
   reenteredPassword: string | null
+  captcha: string | null
 }
 const route = useRoute()
 const formRef = ref<FormInst | null>(null)
 const router = useRouter()
 const rPasswordFormItemRef = ref<FormItemInst | null>(null)
 const message = useMessage()
+const captcha = ref<string>('')
 const modelRef = ref<ModelType>({
   username: null,
   email: null,
   password: null,
   reenteredPassword: null,
+  captcha: null,
 })
 
 const user = ref<UserRegisterReq>({
@@ -46,6 +49,7 @@ const user = ref<UserRegisterReq>({
   email: null,
   password: null,
   invite_code: null,
+  captcha: null,
 })
 const { invitecode } = route.params as { invitecode: string }
 
@@ -78,6 +82,7 @@ const types: MessageType[] = [
   'loading',
 ]
 let msgReactive: MessageReactive | null = null
+
 const rules: FormRules = {
   username: [
     {
@@ -200,22 +205,29 @@ async function handleRegisterButtonClick(e: MouseEvent) {
       }
       router.push('/')
     }
-    else {
-      throw new Error('Registration failed.')
-    }
   }
   catch (error: any) {
     if (msgReactive) {
       msgReactive.type = types[3]
       msgReactive.content = `${error.message}\n${t('common.registerFail')}`
     }
-    modelRef.value.password = ''
-    modelRef.value.reenteredPassword = ''
+    await getCaptCha()
+    modelRef.value.password = null
+    modelRef.value.reenteredPassword = null
+    modelRef.value.captcha = null
   }
   finally {
-    modelRef.value.password = ''
+    modelRef.value.password = null
   }
 }
+
+async function getCaptCha() {
+  const result = await fetchCaptCha<CaptChaRes>()
+  captcha.value = `data:image/png;base64,${result.data.image}`
+}
+onMounted(async () => {
+  await getCaptCha()
+})
 </script>
 
 <template>
@@ -248,9 +260,24 @@ async function handleRegisterButtonClick(e: MouseEvent) {
             @keydown.enter.prevent
           />
         </NFormItem>
+        <NFormItem path="captcha" :label="$t('common.captcha')" label-width="100px">
+          <NInput
+            v-model:value="modelRef.captcha"
+            autosizes
+            placeholder=""
+            clearable
+            autofocus
+            style="min-width: 50%"
+            @keydown.enter.prevent
+          />
+          <NImage
+            width="100"
+            :src="captcha"
+          />
+        </NFormItem>
         <NButton
           class="register-button"
-          :disabled="modelRef.username === null || modelRef.email === null"
+          :disabled="modelRef.username === null || modelRef.email === null || modelRef.captcha === null"
           round
           type="primary" size="large" @click="handleRegisterButtonClick"
         >

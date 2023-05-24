@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 15:31:53
- * @LastEditTime: 2023-04-21 11:41:17
+ * @LastEditTime: 2023-05-24 21:32:50
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/store/modules/auth/helper.ts
  */
@@ -12,8 +12,8 @@ export function getToken() {
   return ls.get(LOCAL_NAME)
 }
 
-export function getTime() {
-  return ls.getTime(LOCAL_NAME) ?? 0
+export function getExprieTime() {
+  return ls.getExprieTime(LOCAL_NAME) ?? 0
 }
 
 export function setToken(token: string, expire: number) {

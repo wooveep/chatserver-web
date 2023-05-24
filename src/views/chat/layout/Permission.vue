@@ -1,14 +1,15 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-05-22 11:29:14
+ * @LastEditTime: 2023-05-24 21:30:14
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Permission.vue
 -->
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   NButton, NForm, NFormItem,
+  NImage,
 
   NInput,
 
@@ -25,8 +26,8 @@ import { useRouter } from 'vue-router'
 import { useChat } from '../hooks/useChat'
 import { useAuthStore } from '@/store'
 import Icon403 from '@/icons/403.vue'
-import { fetchLogin } from '@/api'
-import type { UserLoginReq, UserLoginRes } from '@/models'
+import { fetchCaptCha, fetchLogin } from '@/api'
+import type { CaptChaRes, UserLoginReq, UserLoginRes } from '@/models'
 import { myTrim } from '@/utils/format'
 import { CryptoPassword } from '@/utils/crypto'
 defineProps<Props>()
@@ -43,19 +44,29 @@ const authStore = useAuthStore()
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
 // const loading = ref(false)
+const captcha = ref<string>('')
 const modelRef = ref<UserLoginReq>({
   username: null,
   password: null,
+  captcha: null,
 })
 
 const rules: FormRules = {
   username: [{
     required: true,
-    message: '用户名',
+    message: ' 请输入用户名',
+    trigger: ['input', 'blur'],
+
   }],
   password: [{
     required: true,
     message: '请输入密码',
+    trigger: ['input', 'blur'],
+  }],
+  captcha: [{
+    required: true,
+    message: '请输入验证码',
+    trigger: ['input', 'blur'],
   }],
 }
 
@@ -63,11 +74,12 @@ async function handleLoginButtonClick() {
   try {
     const username = myTrim(modelRef.value.username ?? '')
     const password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
-    const result = await fetchLogin<UserLoginRes>({ username, password })
+    const captcha = myTrim(modelRef.value.captcha ?? '')
+    const result = await fetchLogin<UserLoginRes>({ username, password, captcha })
     if (result.err_code !== 0)
       throw new Error(result.message)
 
-    await authStore.setToken(result.data.token, result.data.expire_at)
+    await authStore.setToken(result.data.token, result.data.timeout)
     message.success('success')
     router.push('/')
     resetChat()
@@ -76,10 +88,12 @@ async function handleLoginButtonClick() {
   catch (error: any) {
     message.error(error.message)
     authStore.removeToken()
-    modelRef.value.password = ''
+    await getCaptCha()
+    modelRef.value.password = null
+    modelRef.value.captcha = null
   }
   finally {
-    modelRef.value.password = ''
+    modelRef.value.password = null
   }
 }
 
@@ -89,6 +103,13 @@ function handlePress(event: KeyboardEvent) {
     handleLoginButtonClick()
   }
 }
+async function getCaptCha() {
+  const result = await fetchCaptCha<CaptChaRes>()
+  captcha.value = `data:image/png;base64,${result.data.image}`
+}
+onMounted(async () => {
+  await getCaptCha()
+})
 </script>
 
 <template>
@@ -112,6 +133,7 @@ function handlePress(event: KeyboardEvent) {
               :placeholder="$t('common.usernameplaceholder')"
               clearable
               autofocus
+              @keydown.enter.prevent
             />
           </NFormItem>
           <NFormItem path="password" :label="$t('common.password')" label-width="100px">
@@ -122,10 +144,24 @@ function handlePress(event: KeyboardEvent) {
               clearable
               type="password"
               show-password-on="mousedown"
-              @keypress="handlePress"
+              @keydown.enter.prevent
             />
           </NFormItem>
-
+          <NFormItem path="captcha" :label="$t('common.captcha')" label-width="100px">
+            <NInput
+              v-model:value="modelRef.captcha"
+              autosizes
+              placeholder=""
+              clearable
+              autofocus
+              style="min-width: 50%"
+              @keypress="handlePress"
+            />
+            <NImage
+              width="100"
+              :src="captcha"
+            />
+          </NFormItem>
           <NButton
             class="login-button"
             :disabled="modelRef.username === null || modelRef.password === null"
@@ -139,6 +175,9 @@ function handlePress(event: KeyboardEvent) {
         </NForm>
         <div class="login-signup">
           <a href="#/register">{{ $t('user.register_link') }}</a>
+        </div>
+        <div class="login-forget">
+          <a href="#/forgetpassword">{{ $t('user.forget_link') }}</a>
         </div>
       </div>
     </div>
@@ -160,5 +199,11 @@ function handlePress(event: KeyboardEvent) {
   font-weight: bold;
   margin: 30px auto;
   text-align: center;
+}
+.login-forget {
+  font-weight: bold;
+  margin: 30px auto;
+  text-align: center;
+  text-decoration: underline;
 }
 </style>

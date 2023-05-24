@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import type {
   FormInst,
-  FormRules,
+  FormRules, MessageReactive, MessageType,
 } from 'naive-ui'
 import {
   NButton,
@@ -12,36 +12,34 @@ import {
   NInput,
   useMessage,
 } from 'naive-ui'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/store'
-import { fetchCaptCha, fetchLogin } from '@/api'
-import type { CaptChaRes, UserLoginReq, UserLoginRes } from '@/models'
-import { CryptoPassword } from '@/utils/crypto'
+import { fetchCaptCha, fetchForgetPassword } from '@/api'
+import type { CaptChaRes, UserForgetPasswordReq } from '@/models'
 import { myTrim } from '@/utils/format'
 
-const router = useRouter()
-const authStore = useAuthStore()
+const types: MessageType[] = [
+  'success',
+  'info',
+  'warning',
+  'error',
+  'loading',
+]
+let msgReactive: MessageReactive | null = null
+
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
 // const loading = ref(false)
 const captcha = ref<string>('')
-const modelRef = ref<UserLoginReq>({
-  username: null,
-  password: null,
+const modelRef = ref<UserForgetPasswordReq>({
+  email: null,
   captcha: null,
 })
 
 const rules: FormRules = {
-  username: [{
+  email: [{
     required: true,
-    message: ' 请输入用户名',
+    message: ' 请输入邮箱',
     trigger: ['input', 'blur'],
 
-  }],
-  password: [{
-    required: true,
-    message: '请输入密码',
-    trigger: ['input', 'blur'],
   }],
   captcha: [{
     required: true,
@@ -51,28 +49,41 @@ const rules: FormRules = {
 }
 
 async function handleLoginButtonClick() {
+  if (msgReactive) {
+    msgReactive.destroy()
+    msgReactive = null
+  }
+  msgReactive = message.create('正在验证,请等待', {
+    type: types[4],
+    closable: true,
+    duration: 0,
+  })
   try {
-    const username = myTrim(modelRef.value.username ?? '')
-    const password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
+    const email = myTrim(modelRef.value.email ?? '')
     const captcha = myTrim(modelRef.value.captcha ?? '')
-    const result = await fetchLogin<UserLoginRes>({ username, password, captcha })
+    const result = await fetchForgetPassword<any>({ email, captcha })
     if (result.err_code !== 0)
       throw new Error(result.message)
-    await authStore.setToken(result.data.token, result.data.timeout)
-    message.success('success')
-    router.push('/')
+    if (msgReactive) {
+      msgReactive.type = types[0]
+      msgReactive.content = '已将密码重置链接发送到您的电子邮箱中，请注意查收'
+    }
   }
   catch (error: any) {
-    message.error(error.message)
-    authStore.removeToken()
+    if (msgReactive) {
+      msgReactive.type = types[3]
+      msgReactive.content = `${error.message}`
+    }
     await getCaptCha()
-    modelRef.value.password = null
+    modelRef.value.email = null
     modelRef.value.captcha = null
   }
   finally {
-    modelRef.value.password = null
+    modelRef.value.email = null
+    modelRef.value.captcha = null
   }
 }
+
 function handlePress(event: KeyboardEvent) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault()
@@ -94,28 +105,17 @@ onMounted(async () => {
   <div class="login">
     <NCard class="login-card">
       <h2 class="login-title">
-        {{ $t('common.loginpage') }}
+        {{ $t('common.forgetpage') }}
       </h2>
       <NForm ref="formRef" label-placement="left" :label-width="120" :model="modelRef" :rules="rules">
-        <NFormItem path="username" :label="$t('common.username')" label-width="100px">
+        <NFormItem path="email" :label="$t('common.email')" label-width="100px">
           <NInput
-            v-model:value="modelRef.username"
+            v-model:value="modelRef.email"
             size="large"
-            :placeholder="$t('common.usernameplaceholder')"
+            :placeholder="$t('common.emailplaceholder')"
             clearable
             autofocus
             @keydown.enter.prevent
-          />
-        </NFormItem>
-        <NFormItem path="password" :label="$t('common.password')" label-width="100px">
-          <NInput
-            v-model:value="modelRef.password"
-            size="large"
-            :placeholder="$t('common.passwordplaceholder')"
-            clearable
-            type="password"
-            show-password-on="mousedown"
-            @keypress="handlePress"
           />
         </NFormItem>
         <NFormItem path="captcha" :label="$t('common.captcha')" label-width="100px">
@@ -127,6 +127,7 @@ onMounted(async () => {
             autofocus
             style="min-width: 50%"
             @keydown.enter.prevent
+            @keypress="handlePress"
           />
           <NImage
             width="100"
@@ -135,21 +136,15 @@ onMounted(async () => {
         </NFormItem>
         <NButton
           class="login-button"
-          :disabled="modelRef.username === null || modelRef.password === null || modelRef.captcha === null"
+          :disabled="modelRef.email === null || modelRef.captcha === null"
           round
           type="primary"
           size="large"
           @click="handleLoginButtonClick"
         >
-          <span class="button-text">{{ $t('common.login') }}</span>
+          <span class="button-text">{{ $t('user.confirm') }}</span>
         </NButton>
       </NForm>
-      <div class="login-signup">
-        <a href="#/register">{{ $t('user.register_link') }}</a>
-      </div>
-      <div class="login-forget">
-        <a href="#/forgetpassword">{{ $t('user.forget_link') }}</a>
-      </div>
     </NCard>
     <!-- <div class="login-footer">
       <p>Cloudyi Li 🧡 版权所有 © 2023 wooveep.com</p>
@@ -203,13 +198,10 @@ onMounted(async () => {
   font-weight: bold;
   margin: 30px auto;
   text-align: center;
-  text-decoration: underline;
-
 }
 .login-forget {
   font-weight: bold;
   margin: 30px auto;
   text-align: center;
-  text-decoration: underline;
 }
 </style>

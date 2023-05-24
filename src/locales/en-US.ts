@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-13 19:14:02
- * @LastEditTime: 2023-05-22 13:21:57
+ * @LastEditTime: 2023-05-24 21:18:52
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/locales/en-US.ts
  */
@@ -20,6 +20,7 @@ export default {
     confirmpasswd: 'Confirm Password',
     confirm: 'Confirm',
     logout: 'Log Out',
+    forget_link: 'Forget your password? Click here',
   },
   giftcard: {
     cdkeyinput: 'CDKEY Verify',
@@ -36,6 +37,8 @@ export default {
     link: 'Invitation link',
   },
   common: {
+    email: 'Email',
+    emailplaceholder: 'Please enter the email',
     add: 'Add',
     addSuccess: 'Add Success',
     edit: 'Edit',
@@ -64,7 +67,10 @@ export default {
     login: 'login',
     username: 'UserName',
     loginpage: 'Sign In',
+    forgetpage: 'Forget Password',
+    resetpage: 'Reset Password',
     password: 'Password',
+    captcha: 'CaptCha',
     usernameplaceholder: 'Please enter user name',
     passwordplaceholder: 'Please enter passowd',
     // upassok: '密码修改成功,请重新登录',

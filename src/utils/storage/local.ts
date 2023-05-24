@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-21 10:53:23
+ * @LastEditTime: 2023-05-24 21:32:34
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/utils/storage/local.ts
  */
@@ -42,7 +42,7 @@ export function createLocalStorage(options?: { expire?: number | null; crypto?: 
     window.localStorage.setItem(key, json)
   }
 
-  function getTime(key: string) {
+  function getExprieTime(key: string) {
     const json = window.localStorage.getItem(key)
     if (json) {
       let storageData: StorageData | null = null
@@ -101,7 +101,7 @@ export function createLocalStorage(options?: { expire?: number | null; crypto?: 
     remove,
     clear,
     setWithExpire,
-    getTime,
+    getExprieTime,
   }
 }
 

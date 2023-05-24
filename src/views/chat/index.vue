@@ -415,7 +415,7 @@ async function refreshToken() {
       const data = response.data
       return data
     })
-    authStore.setToken(result.token, result.expire_at)
+    authStore.setToken(result.token, result.timeout)
     return result.token
   }
 }

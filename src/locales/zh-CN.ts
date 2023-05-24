@@ -13,6 +13,7 @@ export default {
     confirmpasswd: '确认密码',
     confirm: '确认',
     logout: '退出',
+    forget_link: '忘记密码？点击这里',
   },
   giftcard: {
     cdkeyinput: 'CDKEY核销',
@@ -29,6 +30,8 @@ export default {
     link: '邀请链接',
   },
   common: {
+    email: '电子邮件',
+    emailplaceholder: '请输入电子邮件',
     add: '添加',
     addSuccess: '添加成功',
     edit: '编辑',
@@ -57,8 +60,11 @@ export default {
     verify: '验证',
     login: '登录',
     loginpage: '用户登录',
+    forgetpage: '忘记密码',
+    resetpage: '重置密码',
     username: '用户名',
     password: '密码',
+    captcha: '验证码',
     usernameplaceholder: '请输入用户名',
     passwordplaceholder: '请输入密码',
     upassok: '密码修改成功,请重新登录',
