@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-22 09:23:30
+ * @LastEditTime: 2023-05-25 23:27:37
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/store/modules/user/index.ts
  */
@@ -9,8 +9,8 @@ import { defineStore } from 'pinia'
 import { getLocalState, setLocalState } from './helper'
 import type { User } from '@/typings/user'
 // import jwt_decode from 'jwt-decode'
-import { fetchUserAvatar, fetchUserInfo } from '@/api'
-import type { UserAvatarRes, UserInfoRes } from '@/models'
+import { fetchUserAvatar, fetchUserBalance, fetchUserInfo } from '@/api'
+import type { UserAvatarRes, UserBalanceRes, UserInfoRes } from '@/models'
 
 export const useUserStore = defineStore('user-store', {
   state: (): User.UserStore => getLocalState(),
@@ -30,6 +30,11 @@ export const useUserStore = defineStore('user-store', {
   },
   actions: {
 
+    async setUserBalance() {
+      const result = await fetchUserBalance<UserBalanceRes>()
+      this.balance = result.data.balance
+      this.recordState()
+    },
     async setUserInfo() {
       const userresult = await fetchUserInfo<UserInfoRes>()
       const userinfo = userresult.data
@@ -37,8 +42,9 @@ export const useUserStore = defineStore('user-store', {
       this.nickname = userinfo.nickname
       this.email = userinfo.email
       this.phone = userinfo.phone
-      this.balance = userinfo.balance
       this.role = userinfo.role
+      const result = await fetchUserBalance<UserBalanceRes>()
+      this.balance = result.data.balance
       this.recordState()
     },
 
@@ -61,7 +67,7 @@ export const useUserStore = defineStore('user-store', {
       this.nickname = ''
       this.email = ''
       this.phone = ''
-      this.balance = 0
+      this.balance = '0'
       this.role = ''
       this.recordState()
     },

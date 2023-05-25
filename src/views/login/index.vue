@@ -115,7 +115,7 @@ onMounted(async () => {
             clearable
             type="password"
             show-password-on="mousedown"
-            @keypress="handlePress"
+            @keydown.enter.prevent
           />
         </NFormItem>
         <NFormItem path="captcha" :label="$t('common.captcha')" label-width="100px">
@@ -126,7 +126,7 @@ onMounted(async () => {
             clearable
             autofocus
             style="min-width: 50%"
-            @keydown.enter.prevent
+            @keypress="handlePress"
           />
           <NImage
             width="100"

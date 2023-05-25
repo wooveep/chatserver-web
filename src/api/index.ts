@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-24 12:05:51
+ * @LastEditTime: 2023-05-25 23:12:50
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/api/index.ts
  */
@@ -80,6 +80,12 @@ export function fetchUserInfo<UserInfoRes>() {
 export function fetchUserAvatar<UserAvatarRes>() {
   return get<UserAvatarRes>({
     url: '/user/avatar',
+  })
+}
+
+export function fetchUserBalance<UserBalanceRes>() {
+  return get<UserBalanceRes>({
+    url: '/user/balance',
   })
 }
 

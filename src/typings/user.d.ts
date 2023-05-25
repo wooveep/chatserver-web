@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-05-21 21:54:12
- * @LastEditTime: 2023-05-21 21:56:29
+ * @LastEditTime: 2023-05-25 23:27:25
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/typings/user.d.ts
  */
@@ -14,7 +14,7 @@ declare namespace User{
         email: string
         phone: string
         avatar: string
-        balance: number
+        balance: string
         role: string
     }
 }

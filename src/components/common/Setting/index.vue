@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-22 12:23:50
+ * @LastEditTime: 2023-05-25 23:17:46
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/index.vue
 -->
@@ -41,13 +41,13 @@ const show = computed({
   },
 })
 
-async function refreshUserInfo() {
+async function refreshUserBalance() {
   const userStore = useUserStore()
-  await userStore.setUserInfo()
+  await userStore.setUserBalance()
 }
 
 onMounted(() => {
-  refreshUserInfo()
+  refreshUserBalance()
 })
 </script>
 

@@ -24,7 +24,7 @@ export default {
     buy: '点击购买',
   },
   invite: {
-    title: '邀请好友各得5积分奖励',
+    title: '邀请好友各得3积分奖励',
     number: '已邀请人数',
     reward: '已获得奖励',
     link: '邀请链接',

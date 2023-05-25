@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-05-24 21:30:14
+ * @LastEditTime: 2023-05-25 13:59:34
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Permission.vue
 -->
@@ -10,12 +10,9 @@ import { onMounted, ref } from 'vue'
 import {
   NButton, NForm, NFormItem,
   NImage,
-
   NInput,
-
   NModal,
   useMessage,
-
 } from 'naive-ui'
 
 import type {
@@ -38,7 +35,6 @@ const router = useRouter()
 interface Props {
   visible: boolean
 }
-
 // const router = useRouter()
 const authStore = useAuthStore()
 const message = useMessage()
@@ -107,6 +103,7 @@ async function getCaptCha() {
   const result = await fetchCaptCha<CaptChaRes>()
   captcha.value = `data:image/png;base64,${result.data.image}`
 }
+
 onMounted(async () => {
   await getCaptCha()
 })

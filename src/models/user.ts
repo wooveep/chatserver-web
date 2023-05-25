@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-15 18:18:20
- * @LastEditTime: 2023-05-24 21:25:56
+ * @LastEditTime: 2023-05-25 23:27:15
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/models/user.ts
  */
@@ -327,6 +327,20 @@ export interface UserAvatarRes {
        * @memberof UserAvatarRes
        */
   avatar: string
+}
+
+/**
+ *
+ * @export
+ * @interface UserBalanceRes
+ */
+export interface UserBalanceRes {
+  /**
+        *
+        * @type {string}
+        * @memberof UserBalanceRes
+        */
+  balance: string
 }
 
 /**

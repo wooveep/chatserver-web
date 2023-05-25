@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-13 19:14:02
- * @LastEditTime: 2023-05-24 21:18:52
+ * @LastEditTime: 2023-05-25 12:16:17
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/locales/en-US.ts
  */
@@ -31,7 +31,7 @@ export default {
     buy: 'Click To Buy',
   },
   invite: {
-    title: 'Invite your friends and get 5 points each',
+    title: 'Invite your friends and get 3 points each',
     number: 'Invited',
     reward: 'Awarded',
     link: 'Invitation link',

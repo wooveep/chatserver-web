@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-14 09:52:13
- * @LastEditTime: 2023-05-22 13:13:29
+ * @LastEditTime: 2023-05-25 15:32:10
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/UserAvatar/index.vue
 -->
@@ -10,12 +10,13 @@ import { computed, onMounted } from 'vue'
 import { NAvatar, NButton, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { SvgIcon } from '@/components/common'
-import { useAuthStore, useChatStore, useUserStore } from '@/store'
+import { useAuthStore, useChatStore, usePresetStore, useUserStore } from '@/store'
 import defaultAvatar from '@/assets/avatar.jpg'
 import { fetchLogOut } from '@/api'
 const router = useRouter()
 const authStore = useAuthStore()
 const chatStore = useChatStore()
+const presetStore = usePresetStore()
 const message = useMessage()
 const userStore = useUserStore()
 
@@ -29,6 +30,7 @@ async function handleLogoutButtonClick(e: MouseEvent) {
       throw new Error(result.message)
     authStore.removeToken()
     chatStore.resetChatState()
+    presetStore.resetPresetStore()
     message.success('success')
     router.push('/login')
   }
@@ -36,6 +38,7 @@ async function handleLogoutButtonClick(e: MouseEvent) {
     message.error(error.message)
   }
 }
+
 const needPermission = computed(() => !authStore.token)
 
 onMounted(async () => {

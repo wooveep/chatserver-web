@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-22 13:24:43
+ * @LastEditTime: 2023-05-25 23:18:51
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/Recharge.vue
 -->
@@ -13,8 +13,10 @@ import { CardOutline as CardIcon, ShareSocialOutline as ShareIcon } from '@vicon
 import type { UserCdkeyPayReq, UserGiftCard, UserGiftCardRes } from '@/models'
 import { fetchCardList, fetchCdkeyPay } from '@/api'
 import { myTrim } from '@/utils/format'
+import { useUserStore } from '@/store'
 
 const message = useMessage()
+const userStore = useUserStore()
 const formRef = ref<FormInst | null>(null)
 // const loading = ref(false)
 const modelRef = ref<UserCdkeyPayReq>({
@@ -67,6 +69,7 @@ async function handleRechargeButtonClick() {
       msgReactive.type = types[0]
       msgReactive.content = 'CDKEY核销成功，感谢使用'
     }
+    await userStore.setUserBalance()
   }
   catch (error: any) {
     if (msgReactive) {

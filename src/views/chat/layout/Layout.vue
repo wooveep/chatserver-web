@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-24 17:12:19
+ * @LastEditTime: 2023-05-25 14:06:18
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Layout.vue
 -->
@@ -11,9 +11,9 @@ import { NLayout, NLayoutContent } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { useChat } from '../hooks/useChat'
 import Sider from './sider/index.vue'
-import Permission from './Permission.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAppStore, useAuthStore, useChatStore } from '@/store'
+// const Permission = defineAsyncComponent(() => import('./Permission.vue'))
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -45,6 +45,9 @@ const getContainerClass = computed(() => {
 onMounted(async () => {
   if (!needPermission.value)
     await fetchChatHistoryList()
+
+  else
+    router.push('/login')
 })
 
 window.onbeforeunload = function (e) {
@@ -67,7 +70,7 @@ window.onbeforeunload = function (e) {
         </NLayoutContent>
       </NLayout>
     </div>
-    <Permission :visible="needPermission" />
+    <!-- <Permission :visible="needPermission" /> -->
   </div>
 </template>
 
