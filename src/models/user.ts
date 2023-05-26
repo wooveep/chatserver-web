@@ -1,10 +1,12 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-15 18:18:20
- * @LastEditTime: 2023-05-25 23:27:15
+ * @LastEditTime: 2023-05-26 13:14:12
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/models/user.ts
  */
+
+import type { User } from '@/typings/user'
 
 /**
  *
@@ -341,6 +343,46 @@ export interface UserBalanceRes {
         * @memberof UserBalanceRes
         */
   balance: string
+}
+
+/**
+ *
+ * @export
+ * @interface UserBillRes
+ */
+export interface UserBillRes {
+  /**
+         *
+         * @type {User.UserBill}
+         * @memberof UserBillRes
+         */
+  bill_list: Array<User.UserBill> | undefined
+}
+
+/**
+ *
+ * @export
+ * @interface UserBillReq
+ */
+export interface UserBillReq {
+  /**
+          *
+          * @type {number}
+          * @memberof UserBillReq
+          */
+  page: number | null
+  /**
+          *
+          * @type {number}
+          * @memberof UserBillReq
+          */
+  pagesize: number | null
+  /**
+          *
+          * @type {number}
+          * @memberof UserBillReq
+          */
+  date: number | null
 }
 
 /**

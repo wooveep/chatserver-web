@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-04-13 19:14:02
- * @LastEditTime: 2023-05-25 12:16:17
+ * @LastEditTime: 2023-05-26 11:11:29
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/locales/en-US.ts
  */
@@ -104,6 +104,7 @@ export default {
   },
   setting: {
     setting: 'Setting',
+    about: 'About',
     general: 'General',
     advanced: 'Advanced',
     password: 'Password',

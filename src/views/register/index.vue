@@ -203,7 +203,7 @@ async function handleRegisterButtonClick(e: MouseEvent) {
         msgReactive.type = types[0]
         msgReactive.content = `${t('common.registerSuccess')}`
       }
-      router.push('/')
+      router.push('login')
     }
   }
   catch (error: any) {

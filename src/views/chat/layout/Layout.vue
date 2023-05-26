@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-25 14:06:18
+ * @LastEditTime: 2023-05-26 12:47:41
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Layout.vue
 -->
@@ -47,7 +47,7 @@ onMounted(async () => {
     await fetchChatHistoryList()
 
   else
-    router.push('/login')
+    router.push('login')
 })
 
 window.onbeforeunload = function (e) {

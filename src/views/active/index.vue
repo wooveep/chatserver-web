@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-05-10 17:01:10
- * @LastEditTime: 2023-05-10 18:35:49
+ * @LastEditTime: 2023-05-26 12:49:13
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/active/index.vue
 -->
@@ -31,7 +31,7 @@ const activate = async () => {
     const activeCode = activecode
     await fetchUserActive(activeCode)
     message.success('激活成功')
-    router.push('/login')
+    router.push('login')
   }
   catch (err) {
     message.error('激活失败')

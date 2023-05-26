@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-25 23:17:46
+ * @LastEditTime: 2023-05-26 11:13:51
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/index.vue
 -->
@@ -13,6 +13,7 @@ import Password from './Password.vue'
 import Recharge from './Recharge.vue'
 import Config from './Config.vue'
 import Invite from './Invite.vue'
+import About from './About.vue'
 import { SvgIcon } from '@/components/common'
 import { useUserStore } from '@/store'
 
@@ -98,6 +99,15 @@ onMounted(() => {
           </template>
           <div class="min-h-[100px]">
             <Password />
+          </div>
+        </NTabPane>
+        <NTabPane name="About" tab="About">
+          <template #tab>
+            <SvgIcon class="text-lg" icon="ri:pages-line" />
+            <span class="ml-2">{{ $t('setting.about') }}</span>
+          </template>
+          <div class="min-h-[100px]">
+            <About />
           </div>
         </NTabPane>
       </NTabs>

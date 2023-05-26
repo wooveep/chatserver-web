@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-22 12:25:38
+ * @LastEditTime: 2023-05-26 11:33:33
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/sider/Footer.vue
 -->
@@ -10,8 +10,9 @@ import { defineAsyncComponent, ref } from 'vue'
 import { HoverButton, SvgIcon, UserAvatar } from '@/components/common'
 
 const Setting = defineAsyncComponent(() => import('@/components/common/Setting/index.vue'))
-
+const Bills = defineAsyncComponent(() => import('@/components/common/Bills/index.vue'))
 const show = ref(false)
+const billShow = ref(false)
 </script>
 
 <template>
@@ -19,13 +20,17 @@ const show = ref(false)
     <div class="flex-1 flex-shrink-0 overflow-hidden">
       <UserAvatar />
     </div>
-
+    <HoverButton @click="billShow = true">
+      <span class="text-2xl  text-[#4f555e] dark:text-white">
+        <SvgIcon icon="ri:currency-line" />
+      </span>
+    </HoverButton>
     <HoverButton @click="show = true">
       <span class="text-2xl  text-[#4f555e] dark:text-white">
         <SvgIcon icon="ri:settings-4-line" />
       </span>
     </HoverButton>
-
+    <Bills v-if="billShow" v-model:visible="billShow" />
     <Setting v-if="show" v-model:visible="show" />
   </footer>
 </template>

@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-25 23:12:50
+ * @LastEditTime: 2023-05-26 16:33:21
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/api/index.ts
  */
@@ -9,7 +9,7 @@ import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { get, hdelete, post, postEvent } from '@/utils/request'
 import type {
   ChatChattingReq, ChatClearReq, ChatCreateNewReq, ChatDeleteReq, ChatRecordHistoryReq, ChatRegenerategReq,
-  ChatUpdateReq, UserCdkeyPayReq, UserForgetPasswordReq, UserLoginReq, UserRegisterReq, UserRegisterRes,
+  ChatUpdateReq, UserBillReq, UserCdkeyPayReq, UserForgetPasswordReq, UserLoginReq, UserRegisterReq, UserRegisterRes,
   UserResetPasswordReq,
   UserUpadatePasswordReq,
   UserVerifyEmailReq, UserVerifyRes,
@@ -110,6 +110,13 @@ export function fetchInviteLink<UserInviteLinkRes>() {
 export function fetchCardList<UserGiftCardRes>() {
   return get<UserGiftCardRes>({
     url: '/user/giftcard',
+  })
+}
+
+export function fetchUserBills<UserBillRes>(bill: UserBillReq) {
+  const getparams = `pagesize=${bill.pagesize}&page=${bill.page}&date=${bill.date}`
+  return get<UserBillRes>({
+    url: `/user/bill?${getparams}`,
   })
 }
 

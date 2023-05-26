@@ -98,6 +98,7 @@ export default {
   },
   setting: {
     setting: '设置',
+    about: '关于',
     general: '总览',
     password: '密码',
     advanced: '高级',

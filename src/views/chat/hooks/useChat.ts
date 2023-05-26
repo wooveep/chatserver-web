@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-10 19:03:25
+ * @LastEditTime: 2023-05-26 13:32:20
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/hooks/useChat.ts
  */
@@ -92,6 +92,13 @@ export function useChat() {
     }
   }
 
+  const fetchActiveHistoryRecord = async () => {
+    const uuid = chatStore.getActiveUuid
+    const recordlist = Array.from(chatStore.getChatByUuid(uuid))
+    if (recordlist.length === 0)
+      await fetchChatHistoryRecord(uuid)
+  }
+
   const fetchChatHistoryList = async () => {
     await fetchPreset()
     const presetlist = Array.from(presetStore.getPresetList)
@@ -114,9 +121,10 @@ export function useChat() {
           },
           [],
         )
-        await fetchChatHistoryRecord(i.chat_id)
-        presetStore.setActive(chatStore.getChatHistoryByCurrentActive?.presetid ?? '')
+        // await fetchChatHistoryRecord(i.chat_id)
       }
+      presetStore.setActive(chatStore.getChatHistoryByCurrentActive?.presetid ?? '')
+      fetchActiveHistoryRecord()
     }
     catch (error: any) {
       throw new Error(error.message)
@@ -135,5 +143,6 @@ export function useChat() {
     fetchChatHistoryList,
     resetChat,
     fetchChatUUIDNew,
+    fetchActiveHistoryRecord,
   }
 }

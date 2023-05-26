@@ -100,7 +100,7 @@ async function handleResetButtonClick() {
     const temp_code = tempcode
     await fetchResetPassword<any>({ new_password, temp_code })
     message.success('success')
-    router.push('/login')
+    router.push('login')
   }
   catch (error: any) {
     message.error(error.message)

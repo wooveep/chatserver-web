@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-05-21 21:54:12
- * @LastEditTime: 2023-05-25 23:27:25
+ * @LastEditTime: 2023-05-26 13:11:00
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/typings/user.d.ts
  */
@@ -16,5 +16,12 @@ declare namespace User{
         avatar: string
         balance: string
         role: string
+    }
+
+    interface UserBill{
+        change_time: string
+        change: number
+        balance: number
+        comment: string 
     }
 }

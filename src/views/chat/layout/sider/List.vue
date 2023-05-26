@@ -1,6 +1,7 @@
 <script lang='ts' setup>
 import { computed } from 'vue'
 import { NInput, NPopconfirm, NScrollbar } from 'naive-ui'
+import { useChat } from '../../hooks/useChat'
 import { SvgIcon } from '@/components/common'
 import { useAppStore, useChatStore, usePresetStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
@@ -10,6 +11,7 @@ import { router } from '@/router'
 import type { Chat } from '@/typings/chat'
 
 const { isMobile } = useBasicLayout()
+const { fetchActiveHistoryRecord } = useChat()
 
 const appStore = useAppStore()
 const chatStore = useChatStore()
@@ -21,11 +23,11 @@ const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActiv
 async function handleSelect({ uuid }: Chat.History) {
   if (isActive(uuid))
     return
-
   if (chatStore.active)
     chatStore.updateHistory(chatStore.active, { isEdit: false })
   await chatStore.setActive(uuid)
   presetStore.setActive(currentChatHistory.value?.presetid ?? '')
+  await fetchActiveHistoryRecord()
   if (isMobile.value)
     appStore.setSiderCollapsed(true)
 }
