@@ -286,7 +286,7 @@ onMounted(async () => {
       </NForm>
     </NCard>
     <div class="register-footer">
-      <p>Cloudyi Li 🧡 版权所有 © 2023 wooveep.com</p>
+      <p>wooveep 版权所有 © 2023 wooveep.net</p>
     </div>
   </div>
 </template>

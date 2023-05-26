@@ -151,9 +151,9 @@ onMounted(async () => {
         <a href="#/forgetpassword">{{ $t('user.forget_link') }}</a>
       </div>
     </NCard>
-    <!-- <div class="login-footer">
-      <p>Cloudyi Li 🧡 版权所有 © 2023 wooveep.com</p>
-    </div> -->
+    <div class="login-footer">
+      <p>wooveep 版权所有 © 2023 wooveep.net</p>
+    </div>
   </div>
 </template>
 

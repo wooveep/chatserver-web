@@ -1,14 +1,14 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-10 12:27:45
+ * @LastEditTime: 2023-05-26 16:36:09
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/utils/crypto/index.ts
  */
 import CryptoJS from 'crypto-js'
 
 const CryptoSecret = '__CRYPTO_SECRET__'
-const PasswordKey = 'ABCDABCDABCDABCD'
+const PasswordKey = 'QLHDYGCODHTAPWEB'
 export function enCrypto(data: any) {
   const str = JSON.stringify(data)
   return CryptoJS.AES.encrypt(str, CryptoSecret).toString()
