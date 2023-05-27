@@ -1,12 +1,17 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-26 11:27:20
+ * @LastEditTime: 2023-05-27 20:39:20
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/About.vue
 -->
 <script setup lang='ts'>
 import { NScrollbar } from 'naive-ui'
+import { onMounted } from 'vue'
+let adsenseContent = ''
+onMounted(() => {
+  adsenseContent = document.getElementById('divadsensedisplaynone')?.innerHTML ?? ''
+})
 </script>
 
 <template>
@@ -15,6 +20,9 @@ import { NScrollbar } from 'naive-ui'
       关于项目
     </h2>
     <div class="p-2 space-y-2 rounded-md bg-neutral-100 dark:bg-neutral-700">
+      <p>
+        易知釜-构建智能的知识库，让知识更有用。
+      </p>
       <p>
         此项目已开源于 Github
         <a
@@ -50,5 +58,20 @@ import { NScrollbar } from 'naive-ui'
       联系方式
     </h2>
     <p>邮箱： cloudyi@wooveep.net </p>
+    <div class="register-footer">
+      <p>wooveep 版权所有 © 2023 wooveep.net</p>
+    </div>
+    <div id="adsgoeshere" style="background: #1d1f29; padding-top:60px; text-align: center;" v-html="adsenseContent" />
   </div>
 </template>
+
+<style scoped>
+.register-footer {
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+}
+</style>

@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-26 11:13:51
+ * @LastEditTime: 2023-05-27 12:09:48
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/index.vue
 -->
@@ -55,7 +55,7 @@ onMounted(() => {
 <template>
   <NModal v-model:show="show" :auto-focus="false" preset="card" style="width: 95%; max-width: 640px">
     <div>
-      <NTabs v-model:value="active" type="line" justify-content="space-evenly" animated>
+      <NTabs v-model:value="active" type="bar" justify-content="space-between" size="small">
         <NTabPane name="General" tab="General">
           <template #tab>
             <SvgIcon class="text-lg" icon="ri:file-user-line" />

@@ -1,19 +1,19 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-14 09:52:13
- * @LastEditTime: 2023-05-25 15:32:10
+ * @LastEditTime: 2023-05-27 00:23:53
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/UserAvatar/index.vue
 -->
 <script setup lang='ts'>
 import { computed, onMounted } from 'vue'
 import { NAvatar, NButton, useMessage } from 'naive-ui'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { SvgIcon } from '@/components/common'
 import { useAuthStore, useChatStore, usePresetStore, useUserStore } from '@/store'
 import defaultAvatar from '@/assets/avatar.jpg'
 import { fetchLogOut } from '@/api'
-const router = useRouter()
+// const router = useRouter()
 const authStore = useAuthStore()
 const chatStore = useChatStore()
 const presetStore = usePresetStore()
@@ -32,7 +32,7 @@ async function handleLogoutButtonClick(e: MouseEvent) {
     chatStore.resetChatState()
     presetStore.resetPresetStore()
     message.success('success')
-    router.push('/login')
+    window.location.replace('/#/login')
   }
   catch (error: any) {
     message.error(error.message)

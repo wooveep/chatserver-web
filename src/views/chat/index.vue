@@ -61,7 +61,7 @@ const chat_uuid = computed(() => chatStore.getActiveUuid).value
 const dataSources = computed(() => chatStore.getChatByUuid(chat_uuid))
 const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActive)
 const currentPresetName = computed(() => presetStore.getPresetNameByActive ?? '')
-
+const currentPresetTips = computed(() => presetStore.getPresetTipsByActive ?? '')
 // 添加PromptStore
 // const promptStore = usePromptStore()
 
@@ -407,20 +407,23 @@ const footerClass = computed(() => {
 })
 
 async function refreshToken() {
-  const tokenExpire = authStore.getTokenTime ?? 0
-  const timenow = new Date().getTime()
-  const timediff = tokenExpire - timenow
-  if (timediff <= 600000) {
-    const result = await fetchRefreshToken<UserLoginRes>().then((response) => {
-      const data = response.data
-      return data
-    })
-    authStore.setToken(result.token, result.timeout)
-    return result.token
+  if (authStore.token) {
+    const tokenExpire = authStore.getTokenTime ?? 0
+    const timenow = new Date().getTime()
+    const timediff = tokenExpire - timenow
+    if (timediff <= 600000) {
+      const result = await fetchRefreshToken<UserLoginRes>().then((response) => {
+        const data = response.data
+        return data
+      })
+      authStore.setToken(result.token, result.timeout)
+      return result.token
+    }
   }
 }
 
 onMounted(() => {
+  refreshToken()
   scrollToBottom()
   if (inputRef.value && !isMobile.value)
     inputRef.value?.focus()
@@ -450,9 +453,13 @@ onUnmounted(() => {
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
           <template v-if="!dataSources.length">
-            <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
-              <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-              <span class="text-2xl text-[#4f555e] dark:text-white">Hello! 当前我的角色是：{{ currentPresetName }}</span>
+            <div class="flex flex-wrap items-center justify-center mt-4 text-center text-neutral-300">
+              <SvgIcon icon="ri:global-line" class="mr-2 text-3xl" />
+              <span class="text-2xl text-[#4f555e] dark:text-white">Hi! 我是：{{ currentPresetName }}</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-center mt-4 text-center text-neutral-300">
+              <SvgIcon icon="ri:lightbulb-flash-line" class="mr-2 text-3xl" />
+              <span class="text-2xl text-[#4f555e] dark:text-white" style="display: block;">提示：{{ currentPresetTips }}</span>
             </div>
           </template>
           <template v-else>
