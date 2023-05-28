@@ -454,12 +454,13 @@ onUnmounted(() => {
         >
           <template v-if="!dataSources.length">
             <div class="flex flex-wrap items-center justify-center mt-4 text-center text-neutral-300">
-              <SvgIcon icon="ri:global-line" class="mr-2 text-3xl" />
+              <SvgIcon icon="ri:robot-line" class="mr-4 text-2xl text-sky-600" />
               <span class="text-2xl text-[#4f555e] dark:text-white">Hi! 我是：{{ currentPresetName }}</span>
             </div>
-            <div class="flex flex-wrap items-center justify-center mt-4 text-center text-neutral-300">
-              <SvgIcon icon="ri:lightbulb-flash-line" class="mr-2 text-3xl" />
-              <span class="text-2xl text-[#4f555e] dark:text-white" style="display: block;">提示：{{ currentPresetTips }}</span>
+            <div class="flex flex-wrap items-center justify-center mt-4 text-center text-neutral-300 ">
+              <SvgIcon icon="ri:lightbulb-flash-line" class="text-3xl text-yellow-400" />
+              <span class=" text-xl text-[#4f555e] whitespace-pre-wrap dark:text-white italic">
+                {{ currentPresetTips }}</span>
             </div>
           </template>
           <template v-else>
@@ -491,18 +492,18 @@ onUnmounted(() => {
     <footer :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
-          <HoverButton v-if="!isMobile" @click="handlePreset">
+          <HoverButton v-if="!isMobile" tooltip="角色切换" @click="handlePreset">
             <span class="text-xl text-[#4f555e] dark:text-white">
               <SvgIcon icon="ri:store-3-line" />
             </span>
           </HoverButton>
           <PresetStore v-if="showPreset" v-model:visible="showPreset" :mobile="false" :memorylevel="memorylevel" />
-          <HoverButton v-if="!isMobile" @click="handleExport">
+          <HoverButton v-if="!isMobile" tooltip="保存会话" @click="handleExport">
             <span class="text-xl text-[#4f555e] dark:text-white">
               <SvgIcon icon="ri:download-2-line" />
             </span>
           </HoverButton>
-          <HoverButton v-if="!isMobile" @click="handleMemory">
+          <HoverButton v-if="!isMobile" tooltip="记忆度" @click="handleMemory">
             <span class="text-xl" :class="{ 'text-[#4b9e5f]': usingMemory, 'text-[#a8071a]': !usingMemory }">
               <SvgIcon icon="ri:chat-history-line" />
             </span>

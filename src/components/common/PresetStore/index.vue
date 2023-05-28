@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-20 18:57:17
- * @LastEditTime: 2023-05-27 10:12:24
+ * @LastEditTime: 2023-05-28 12:55:18
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/PresetStore/index.vue
 -->
@@ -10,6 +10,7 @@ import { computed, onMounted, ref } from 'vue'
 import { NButton, NCard, NModal, NRadio, NRadioGroup, useMessage } from 'naive-ui'
 import { useChatStore, usePresetStore } from '@/store'
 import { fetchChatClear, fetchChatUpdate } from '@/api'
+import { usePreset } from '@/views/chat/hooks/userPreset'
 
 const props = defineProps<Props>()
 
@@ -38,6 +39,7 @@ const show = computed({
     emit('update:visible', visible)
   },
 })
+const { fetchPreset } = usePreset()
 
 // function updateActivePreset(UUID: string) {
 //   presetStore.setActive(UUID)
@@ -59,6 +61,7 @@ async function updateChatpreset() {
   show.value = false
 }
 onMounted(() => {
+  fetchPreset()
   checkPreset.value = presetStore.getActiveUuid
 })
 </script>
