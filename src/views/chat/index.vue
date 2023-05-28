@@ -61,7 +61,7 @@ const chat_uuid = computed(() => chatStore.getActiveUuid).value
 const dataSources = computed(() => chatStore.getChatByUuid(chat_uuid))
 const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActive)
 const currentPresetName = computed(() => presetStore.getPresetNameByActive ?? '')
-
+const currentPresetTips = computed(() => presetStore.getPresetTipsByActive ?? '')
 // 添加PromptStore
 // const promptStore = usePromptStore()
 
@@ -407,20 +407,23 @@ const footerClass = computed(() => {
 })
 
 async function refreshToken() {
-  const tokenExpire = authStore.getTokenTime ?? 0
-  const timenow = new Date().getTime()
-  const timediff = tokenExpire - timenow
-  if (timediff <= 600000) {
-    const result = await fetchRefreshToken<UserLoginRes>().then((response) => {
-      const data = response.data
-      return data
-    })
-    authStore.setToken(result.token, result.timeout)
-    return result.token
+  if (authStore.token) {
+    const tokenExpire = authStore.getTokenTime ?? 0
+    const timenow = new Date().getTime()
+    const timediff = tokenExpire - timenow
+    if (timediff <= 600000) {
+      const result = await fetchRefreshToken<UserLoginRes>().then((response) => {
+        const data = response.data
+        return data
+      })
+      authStore.setToken(result.token, result.timeout)
+      return result.token
+    }
   }
 }
 
 onMounted(() => {
+  refreshToken()
   scrollToBottom()
   if (inputRef.value && !isMobile.value)
     inputRef.value?.focus()
@@ -450,9 +453,14 @@ onUnmounted(() => {
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
           <template v-if="!dataSources.length">
-            <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
-              <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-              <span class="text-2xl text-[#4f555e] dark:text-white">Hello! 当前我的角色是：{{ currentPresetName }}</span>
+            <div class="flex flex-wrap items-center justify-center mt-4 text-center text-neutral-300">
+              <SvgIcon icon="ri:robot-line" class="mr-4 text-2xl text-sky-600" />
+              <span class="text-2xl text-[#4f555e] dark:text-white">Hi! 我是：{{ currentPresetName }}</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-center mt-4 text-center text-neutral-300 ">
+              <SvgIcon icon="ri:lightbulb-flash-line" class="text-3xl text-yellow-400" />
+              <span class=" text-xl text-[#4f555e] whitespace-pre-wrap dark:text-white italic">
+                {{ currentPresetTips }}</span>
             </div>
           </template>
           <template v-else>
@@ -484,18 +492,18 @@ onUnmounted(() => {
     <footer :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
-          <HoverButton v-if="!isMobile" @click="handlePreset">
+          <HoverButton v-if="!isMobile" tooltip="角色切换" @click="handlePreset">
             <span class="text-xl text-[#4f555e] dark:text-white">
               <SvgIcon icon="ri:store-3-line" />
             </span>
           </HoverButton>
           <PresetStore v-if="showPreset" v-model:visible="showPreset" :mobile="false" :memorylevel="memorylevel" />
-          <HoverButton v-if="!isMobile" @click="handleExport">
+          <HoverButton v-if="!isMobile" tooltip="保存会话" @click="handleExport">
             <span class="text-xl text-[#4f555e] dark:text-white">
               <SvgIcon icon="ri:download-2-line" />
             </span>
           </HoverButton>
-          <HoverButton v-if="!isMobile" @click="handleMemory">
+          <HoverButton v-if="!isMobile" tooltip="记忆度" @click="handleMemory">
             <span class="text-xl" :class="{ 'text-[#4b9e5f]': usingMemory, 'text-[#a8071a]': !usingMemory }">
               <SvgIcon icon="ri:chat-history-line" />
             </span>

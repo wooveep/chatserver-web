@@ -16,7 +16,7 @@ import {
   NInput,
   useMessage,
 } from 'naive-ui'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import type { CaptChaRes, UserRegisterReq, UserRegisterRes, UserVerifyEmailReq, UserVerifyRes, UserVerifyUserNameReq } from '@/models'
 import { fetchCaptCha, fetchRegister, fetchVerifyEmail, fetchVerifyUsername } from '@/api'
 import { CryptoPassword } from '@/utils/crypto'
@@ -32,7 +32,7 @@ interface ModelType {
 }
 const route = useRoute()
 const formRef = ref<FormInst | null>(null)
-const router = useRouter()
+// const router = useRouter()
 const rPasswordFormItemRef = ref<FormItemInst | null>(null)
 const message = useMessage()
 const captcha = ref<string>('')
@@ -196,6 +196,7 @@ async function handleRegisterButtonClick(e: MouseEvent) {
     user.value.email = modelRef.value.email
     user.value.password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
     user.value.invite_code = invitecode
+    user.value.captcha = myTrim(modelRef.value.captcha ?? '')
     const result = await fetchRegister<UserRegisterRes>(user.value)
     const isSuccess = result.data.is_success
     if (isSuccess) {
@@ -203,7 +204,7 @@ async function handleRegisterButtonClick(e: MouseEvent) {
         msgReactive.type = types[0]
         msgReactive.content = `${t('common.registerSuccess')}`
       }
-      router.push('login')
+      window.location.replace('/#/login')
     }
   }
   catch (error: any) {
@@ -264,7 +265,7 @@ onMounted(async () => {
           <NInput
             v-model:value="modelRef.captcha"
             autosizes
-            placeholder=""
+            placeholder="请输入验证码"
             clearable
             autofocus
             style="min-width: 50%"
@@ -286,7 +287,7 @@ onMounted(async () => {
       </NForm>
     </NCard>
     <div class="register-footer">
-      <p>Cloudyi Li 🧡 版权所有 © 2023 wooveep.com</p>
+      <p>wooveep 版权所有 © 2023 wooveep.net</p>
     </div>
   </div>
 </template>

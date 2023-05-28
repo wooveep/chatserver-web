@@ -50,8 +50,16 @@ export const useChatStore = defineStore('chat-store', {
     },
 
     addHistory(history: Chat.History, chatData: Chat.Record[] = []) {
-      this.history.unshift(history)
-      this.chat.unshift({ uuid: history.uuid, data: chatData })
+      const historyindex = this.history.findIndex(item => item.uuid === history.uuid)
+      // const chatindex = this.chat.findIndex(item => item.uuid === history.uuid)
+      if (historyindex !== -1) {
+        this.history[historyindex] = history
+      }
+      else {
+        this.history.unshift(history)
+        this.chat.unshift({ uuid: history.uuid, data: chatData })
+        // this.reloadRoute(history.uuid)
+      }
       this.active = history.uuid
       this.reloadRoute(history.uuid)
       this.recordState()

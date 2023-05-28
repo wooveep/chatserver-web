@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-25 23:18:51
+ * @LastEditTime: 2023-05-26 16:54:00
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/Recharge.vue
 -->
@@ -153,22 +153,21 @@ onMounted(async () => {
               {{ item.card_name }}
             </template>
             <template #header-extra>
-              <NRow>
-                <span class="card-discount">¥ {{ item.card_discount }} 元</span>
-              </NRow>
-              <NRow>
-                <span class="card-amount">¥ {{ item.card_amount }} 元</span>
-              </NRow>
-            </template>
-            {{ item.card_comment }}
-            <template #footer>
               <p class="card-link">
                 <NIcon size="14">
                   <ShareIcon />
                 </NIcon>
-                {{ $t('giftcard.buylink') }}:
                 <a :href="item.card_link ?? '' " target="_blank">{{ $t('giftcard.buy') }}</a>
               </p>
+            </template>
+            <NRow>
+              <span class="card-discount">¥ {{ item.card_discount }} 元</span>
+            </NRow>
+            <NRow>
+              <span class="card-amount">¥ {{ item.card_amount }} 元</span>
+            </NRow>
+            <template #footer>
+              {{ item.card_comment }}
             </template>
           </NThing>
         </NCard>

@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-21 22:00:06
+ * @LastEditTime: 2023-05-26 23:04:17
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/store/modules/user/helper.ts
  */
@@ -17,7 +17,7 @@ export function defaultState(): User.UserStore {
     email: '',
     phone: '',
     avatar: '',
-    balance: 0,
+    balance: '0',
     role: '',
   }
 }

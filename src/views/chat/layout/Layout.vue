@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-26 12:47:41
+ * @LastEditTime: 2023-05-27 00:12:50
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/layout/Layout.vue
 -->
@@ -45,9 +45,8 @@ const getContainerClass = computed(() => {
 onMounted(async () => {
   if (!needPermission.value)
     await fetchChatHistoryList()
-
   else
-    router.push('login')
+    window.location.replace('/#/login')
 })
 
 window.onbeforeunload = function (e) {
@@ -73,15 +72,3 @@ window.onbeforeunload = function (e) {
     <!-- <Permission :visible="needPermission" /> -->
   </div>
 </template>
-
-<style scoped>
-.login-footer {
-  position: fixed;
-  bottom: 0px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 12px;
-  color: #999;
-}
-</style>

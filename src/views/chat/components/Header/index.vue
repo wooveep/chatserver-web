@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-24 09:20:29
- * @LastEditTime: 2023-05-04 17:02:07
+ * @LastEditTime: 2023-05-28 08:28:31
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/chat/components/Header/index.vue
 -->
@@ -70,20 +70,20 @@ function handleExport() {
       >
         {{ currentChatHistory?.title ?? '' }}
       </h1>
-      <div class="flex items-center space-x-2">
-        <HoverButton @click="showPresetMoblie = true">
+      <div class="flex items-center justify-around space-x-2">
+        <HoverButton tooltip="角色切换" @click="showPresetMoblie = true">
           <span class="text-xl text-[#4f555e] dark:text-white">
             <SvgIcon icon="ri:store-3-line" />
           </span>
         </HoverButton>
         <PresetStore v-if="showPresetMoblie" v-model:visible="showPresetMoblie" :mobile="true" />
-        <HoverButton @click="showMemoryMoblie = true">
+        <HoverButton tooltip="记忆度" @click="showMemoryMoblie = true">
           <span class="text-xl" :class="{ 'text-[#4b9e5f]': usingMemory, 'text-[#a8071a]': !usingMemory }">
             <SvgIcon icon="ri:chat-history-line" />
           </span>
         </HoverButton>
         <MemoryLevel v-if="showMemoryMoblie" v-model:visible="showMemoryMoblie" :mobile="true" />
-        <HoverButton @click="handleExport">
+        <HoverButton tooltip="保存会话" @click="handleExport">
           <span class="text-xl text-[#4f555e] dark:text-white">
             <SvgIcon icon="ri:download-2-line" />
           </span>

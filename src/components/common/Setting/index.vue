@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-26 11:13:51
+ * @LastEditTime: 2023-05-28 08:31:01
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/index.vue
 -->
@@ -12,7 +12,6 @@ import General from './General.vue'
 import Password from './Password.vue'
 import Recharge from './Recharge.vue'
 import Config from './Config.vue'
-import Invite from './Invite.vue'
 import About from './About.vue'
 import { SvgIcon } from '@/components/common'
 import { useUserStore } from '@/store'
@@ -55,7 +54,7 @@ onMounted(() => {
 <template>
   <NModal v-model:show="show" :auto-focus="false" preset="card" style="width: 95%; max-width: 640px">
     <div>
-      <NTabs v-model:value="active" type="line" justify-content="space-evenly" animated>
+      <NTabs v-model:value="active" type="bar" justify-content="space-between" size="small">
         <NTabPane name="General" tab="General">
           <template #tab>
             <SvgIcon class="text-lg" icon="ri:file-user-line" />
@@ -81,15 +80,6 @@ onMounted(() => {
           </template>
           <div class="min-h-[100px]">
             <Recharge />
-          </div>
-        </NTabPane>
-        <NTabPane name="Invite" tab="Invite">
-          <template #tab>
-            <SvgIcon class="text-lg" icon="ri:links-line" />
-            <span class="ml-2">{{ $t('setting.invite') }}</span>
-          </template>
-          <div class="min-h-[100px]">
-            <Invite />
           </div>
         </NTabPane>
         <NTabPane name="Password" tab="Password">
