@@ -1,33 +1,47 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-05-14 10:14:15
- * @LastEditTime: 2023-05-14 11:34:03
+ * @LastEditTime: 2023-05-27 21:34:41
  * @LastEditors: cloudyi.li
- * @FilePath: \chatserver-web\vite.config.ts
+ * @FilePath: /chatserver-web/vite.config.ts
  */
 import path from 'path'
 import type { PluginOption } from 'vite'
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
-
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split'
+// import { visualizer } from 'rollup-plugin-visualizer'
+import viteCompression from 'vite-plugin-compression'
 function setupPlugins(env: ImportMetaEnv): PluginOption[] {
-  const plugins = [vue()]
-
-  if (env.VITE_GLOB_APP_PWA === 'true') {
-    VitePWA({
+  return [
+    vue(),
+    env.VITE_GLOB_APP_PWA === 'true' && VitePWA({
       injectRegister: 'auto',
       manifest: {
-        name: 'ChatServer',
+        name: '易知釜',
         short_name: 'ChatServer',
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
         ],
       },
-    })
-  }
-  return plugins
+    }),
+    chunkSplitPlugin({
+      strategy: 'default',
+      customSplitting: {
+        // `react` and `react-dom` 会被打包到一个名为`render-vendor`的 chunk 里面(包括它们的一些依赖，如 object-assign)
+        vue: ['vue'],
+        // 源码中 utils 目录的代码都会打包进 `utils` 这个 chunk 中
+        mark: ['markdown-it'],
+        katex: ['katex', 'html2canvas'],
+        hilight: ['highlight.js'],
+        // plugin: [/src\/plugins/],
+        // utils: [/src\/utils/],
+      },
+    }),
+    viteCompression(),
+  ]
 }
 
 export default defineConfig((env) => {
@@ -55,9 +69,19 @@ export default defineConfig((env) => {
     build: {
       reportCompressedSize: false,
       sourcemap: false,
+      // rollupOptions: {
+      //   output: {
+      //     manualChunks(id) {
+      //       if (id.includes('node_modules'))
+      //         return id.toString().split('node_modules/')[1].split('/')[0].toString()
+      //     },
+      //   },
+      // },
+      // minify: 'esbuild',
       commonjsOptions: {
         ignoreTryCatch: false,
       },
+
     },
   }
 })

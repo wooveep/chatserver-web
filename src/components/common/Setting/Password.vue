@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-22 13:11:02
+ * @LastEditTime: 2023-05-27 00:24:23
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/Password.vue
 -->
@@ -14,7 +14,7 @@ import type { UserUpadatePasswordReq } from '@/models'
 // import { router } from '@/router'
 import { CryptoPassword } from '@/utils/crypto'
 import { myTrim } from '@/utils/format'
-import { router } from '@/router'
+// import { router } from '@/router'
 import { useAuthStore, useChatStore } from '@/store'
 import { t } from '@/locales'
 // import { ref } from 'vue'
@@ -80,7 +80,7 @@ async function handleModifypasswordButtonClick(e: MouseEvent) {
         msgReactive.type = types[0]
         msgReactive.content = '密码修改成功；请重新登录'
       }
-      router.push('/login')
+      window.location.replace('/#/login')
     }
     catch (error: any) {
       if (msgReactive) {

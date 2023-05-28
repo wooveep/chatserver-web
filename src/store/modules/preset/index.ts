@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-05-04 17:20:01
- * @LastEditTime: 2023-05-06 22:08:07
+ * @LastEditTime: 2023-05-27 10:14:33
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/store/modules/preset/index.ts
  */
@@ -17,6 +17,13 @@ export const usePresetStore = defineStore('preset-store', {
       const index = state.list.findIndex(item => item.preset_id === state.active)
       if (index !== -1)
         return state.list[index].preset_name
+      return null
+    },
+
+    getPresetTipsByActive(state: Preset.PresetStore) {
+      const index = state.list.findIndex(item => item.preset_id === state.active)
+      if (index !== -1)
+        return state.list[index].preset_tips
       return null
     },
 
@@ -38,7 +45,12 @@ export const usePresetStore = defineStore('preset-store', {
     },
 
     addPreset(preset: Preset.Preset) {
-      this.list.unshift(preset)
+      const index = this.list.findIndex(item => item.preset_id === preset.preset_id)
+      if (index !== -1)
+        this.list[index] = preset
+      else
+        this.list.unshift(preset)
+      this.recordState()
     },
     setActive(uuid: string) {
       this.active = uuid

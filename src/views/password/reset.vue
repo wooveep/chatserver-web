@@ -13,7 +13,7 @@ import {
   NInput,
   useMessage,
 } from 'naive-ui'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { fetchResetPassword } from '@/api'
 import { CryptoPassword } from '@/utils/crypto'
 import { myTrim } from '@/utils/format'
@@ -23,7 +23,7 @@ interface ModelType {
 }
 
 const route = useRoute()
-const router = useRouter()
+// const router = useRouter()
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
 // const loading = ref(false)
@@ -100,7 +100,7 @@ async function handleResetButtonClick() {
     const temp_code = tempcode
     await fetchResetPassword<any>({ new_password, temp_code })
     message.success('success')
-    router.push('login')
+    window.location.replace('/#/login')
   }
   catch (error: any) {
     message.error(error.message)

@@ -1,19 +1,19 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-05-10 17:01:10
- * @LastEditTime: 2023-05-26 12:49:13
+ * @LastEditTime: 2023-05-26 23:58:09
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/views/active/index.vue
 -->
 <script setup lang='ts'>
 import { useMessage } from 'naive-ui'
 import { onMounted, reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { fetchUserActive } from '@/api'
 
 const route = useRoute()
 const message = useMessage()
-const router = useRouter()
+// const router = useRouter()
 const title = '用户激活'
 const cardDesc = '请填写您的激活码'
 
@@ -31,7 +31,7 @@ const activate = async () => {
     const activeCode = activecode
     await fetchUserActive(activeCode)
     message.success('激活成功')
-    router.push('login')
+    window.location.replace('/#/login')
   }
   catch (err) {
     message.error('激活失败')

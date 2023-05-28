@@ -3,6 +3,8 @@ import { onMounted, ref } from 'vue'
 import type {
   FormInst,
   FormRules,
+  MessageReactive,
+  MessageType,
 } from 'naive-ui'
 import {
   NButton,
@@ -25,6 +27,14 @@ const message = useMessage()
 const formRef = ref<FormInst | null>(null)
 // const loading = ref(false)
 const captcha = ref<string>('')
+const types: MessageType[] = [
+  'success',
+  'info',
+  'warning',
+  'error',
+  'loading',
+]
+let msgReactive: MessageReactive | null = null
 const modelRef = ref<UserLoginReq>({
   username: null,
   password: null,
@@ -51,6 +61,15 @@ const rules: FormRules = {
 }
 
 async function handleLoginButtonClick() {
+  if (msgReactive) {
+    msgReactive.destroy()
+    msgReactive = null
+  }
+  msgReactive = message.create('正在登录中,请等待', {
+    type: types[4],
+    closable: true,
+    duration: 6000,
+  })
   try {
     const username = myTrim(modelRef.value.username ?? '')
     const password = CryptoPassword(myTrim(modelRef.value.password ?? ''))
@@ -59,11 +78,17 @@ async function handleLoginButtonClick() {
     if (result.err_code !== 0)
       throw new Error(result.message)
     await authStore.setToken(result.data.token, result.data.timeout)
-    message.success('success')
+    if (msgReactive) {
+      msgReactive.type = types[0]
+      msgReactive.content = '登录成功'
+    }
     router.push('/')
   }
   catch (error: any) {
-    message.error(error.message)
+    if (msgReactive) {
+      msgReactive.type = types[3]
+      msgReactive.content = `${error.message}`
+    }
     authStore.removeToken()
     await getCaptCha()
     modelRef.value.password = null
@@ -151,9 +176,9 @@ onMounted(async () => {
         <a href="#/forgetpassword">{{ $t('user.forget_link') }}</a>
       </div>
     </NCard>
-    <!-- <div class="login-footer">
-      <p>Cloudyi Li 🧡 版权所有 © 2023 wooveep.com</p>
-    </div> -->
+    <div class="login-footer">
+      <p>wooveep 版权所有 © 2023 wooveep.net</p>
+    </div>
   </div>
 </template>
 

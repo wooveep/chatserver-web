@@ -1,29 +1,30 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-14 09:52:13
- * @LastEditTime: 2023-05-25 15:32:10
+ * @LastEditTime: 2023-05-28 13:02:41
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/UserAvatar/index.vue
 -->
 <script setup lang='ts'>
-import { computed, onMounted } from 'vue'
-import { NAvatar, NButton, useMessage } from 'naive-ui'
-import { useRouter } from 'vue-router'
-import { SvgIcon } from '@/components/common'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import { NAvatar, useMessage } from 'naive-ui'
+// import { useRouter } from 'vue-router'
+import { HoverButton, SvgIcon } from '@/components/common'
 import { useAuthStore, useChatStore, usePresetStore, useUserStore } from '@/store'
 import defaultAvatar from '@/assets/avatar.jpg'
 import { fetchLogOut } from '@/api'
-const router = useRouter()
+// const router = useRouter()
+const Invite = defineAsyncComponent(() => import('@/components/common/Invite/index.vue'))
 const authStore = useAuthStore()
 const chatStore = useChatStore()
 const presetStore = usePresetStore()
 const message = useMessage()
 const userStore = useUserStore()
+const inviteShow = ref(false)
 
 const userNickname = computed(() => userStore.nickname)
 const userAvatar = computed(() => userStore.getUserAvatar)
-async function handleLogoutButtonClick(e: MouseEvent) {
-  e.preventDefault()
+async function handleLogoutButtonClick() {
   try {
     const result = await fetchLogOut()
     if (result.err_code !== 0)
@@ -32,7 +33,7 @@ async function handleLogoutButtonClick(e: MouseEvent) {
     chatStore.resetChatState()
     presetStore.resetPresetStore()
     message.success('success')
-    router.push('/login')
+    window.location.replace('/#/login')
   }
   catch (error: any) {
     message.error(error.message)
@@ -66,23 +67,19 @@ onMounted(async () => {
       <h2 class="overflow-hidden font-bold text-lg text-ellipsis whitespace-nowrap">
         {{ userNickname }}
       </h2>
-      <!-- <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
-        <span
-          v-if="isString(userInfo.email) && userInfo.email !== ''"
-          v-html="userInfo.email"
-        />
-      </p> -->
-      <NButton
-        :text="true"
-        @click="handleLogoutButtonClick"
-      >
-        <span class="text-xl text-[#4f555e] dark:text-white">
-          <SvgIcon icon="ri:logout-box-r-line" />
-        </span>
-        <h4 class="overflow-hidden text-gray-500  text-md text-ellipsis whitespace-nowrap">
-          {{ $t('user.logout') }}
-        </h4>
-      </NButton>
+      <div class="flex grow-1 shrink-1 basis-auto ">
+        <HoverButton tooltip="邀请" @click="inviteShow = true">
+          <span class="text-2xl  text-[#4f555e] dark:text-white">
+            <SvgIcon icon="ri:share-line" />
+          </span>
+        </HoverButton>
+        <Invite v-if="inviteShow" v-model:visible="inviteShow" />
+        <HoverButton tooltip="退出" @click="handleLogoutButtonClick">
+          <span class="text-2xl  text-[#4f555e] dark:text-white">
+            <SvgIcon icon="ri:logout-box-r-line" />
+          </span>
+        </HoverButton>
+      </div>
     </div>
   </div>
 </template>

@@ -1,13 +1,15 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-05-26 11:29:33
- * @LastEditTime: 2023-05-26 16:32:23
+ * @LastEditTime: 2023-05-27 11:55:41
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Bills/index.vue
 -->
 <script lang='ts' setup>
 import { computed, onMounted, reactive, ref } from 'vue'
-import { NDataTable, NDatePicker, NModal } from 'naive-ui'
+import { NDataTable, NDatePicker, NIcon, NModal } from 'naive-ui'
+import { CalendarNumberSharp as NumberIcon } from '@vicons/ionicons5'
+
 import type { UserBillRes } from '@/models'
 import { fetchUserBills } from '@/api'
 
@@ -109,7 +111,13 @@ onMounted(async () => {
       <h2 class="recharge-title">
         账单明细
       </h2>
-      <div>
+      <div class="flex items-center space-x-4">
+        <span class="flex-shrink-0 w-[160px] ml2 text-ml">
+          <NIcon>
+            <NumberIcon />
+          </NIcon>
+          查询选定日期账单:
+        </span>
         <NDatePicker
           v-model:value="timestamp" type="date" size="small" input-readonly
           @update:value="onChangeDate"

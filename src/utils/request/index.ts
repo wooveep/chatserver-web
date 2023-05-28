@@ -41,7 +41,7 @@ function http<T = any>(
     const authStore = useAuthStore()
     if (error.err_code === 40001) {
       authStore.removeToken()
-      window.location.replace('/login')
+      window.location.replace('/#/login')
     }
     throw new Error(error.message)
   }
