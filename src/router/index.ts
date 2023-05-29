@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-24 20:17:11
+ * @LastEditTime: 2023-05-29 12:28:51
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/router/index.ts
  */
@@ -37,7 +37,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/register/:invitecode?',
     name: 'register',
-    component: () => import('@/views/register/index.vue'),
+    component: () => import('@/views/login/index.vue'),
   },
   {
     path: '/forgetpassword',
