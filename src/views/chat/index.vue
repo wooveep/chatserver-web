@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
 // import { useRoute } from 'vue-router'
-import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
+import { NAutoComplete, NButton, NInput, NSpin, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -44,6 +44,7 @@ const presetStore = usePresetStore()
 const memorylevel = ref<number>(0)
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
+const responseWait = ref<boolean>(true)
 const errorstatus = ref<boolean>(false)
 const inputRef = ref<Ref | null>(null)
 const questionid = ref<string>('')
@@ -85,6 +86,7 @@ async function fetchChattingOnce(lastText: string) {
       let chunk = responseText
       if (lastIndex !== -1)
         chunk = responseText.substring(lastIndex)
+      responseWait.value = false
       try {
         const chunkindex: number = chunk.indexOf('\n')
         const chunkdata: string = chunk.substring(chunkindex + 1)
@@ -130,6 +132,7 @@ async function fetchChattingRegenerate(lastText: string, index: number) {
       let chunk = responseText
       if (lastIndex !== -1)
         chunk = responseText.substring(lastIndex)
+      responseWait.value = false
       try {
         const chunkindex: number = chunk.indexOf('\n')
         const chunkdata: string = chunk.substring(chunkindex + 1)
@@ -245,6 +248,7 @@ async function onConversation() {
   finally {
     updateChatSome(chat_uuid, dataSources.value.length - 2, { msgid: questionid.value })
     loading.value = false
+    responseWait.value = true
   }
 }
 
@@ -309,6 +313,7 @@ async function onRegenerate(index: number) {
   finally {
     updateChatSome(chat_uuid, index - 1, { msgid: questionid.value })
     loading.value = false
+    responseWait.value = true
   }
 }
 
@@ -476,12 +481,19 @@ onUnmounted(() => {
                 :errmsg="item.errmsg"
                 @regenerate="onRegenerate(index)"
               />
-              <div class="sticky bottom-0 left-0 flex justify-center">
-                <NButton v-if="loading" type="warning" @click="handleStop">
+              <div v-if="loading" class="sticky bottom-0 left-0 flex justify-center">
+                <NSpin v-if="responseWait" :show="responseWait">
+                  <template #description>
+                    正在努力思考中，请稍等。。。。。
+                  </template>
+                </NSpin>
+              </div>
+              <div v-if="loading" class="sticky bottom-0 left-0 flex justify-center">
+                <NButton type="warning" @click="handleStop">
                   <template #icon>
                     <SvgIcon icon="ri:stop-circle-line" />
                   </template>
-                  Stop Responding
+                  停止生成
                 </NButton>
               </div>
             </div>
