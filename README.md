@@ -1,12 +1,18 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:04:10
- * @LastEditTime: 2023-06-09 10:49:41
+ * @LastEditTime: 2023-06-09 11:24:38
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/README.md
 -->
 
 # 基于OPENAI的ChatGPT API开发的AI助手服务
+
+## 体验站
+
+  [https://chat.wooveep.net](https://chat.wooveep.net/#/register/uNJtISQw)
+
+新增功能： 支持联网的GPT搜索对接谷歌搜索API与腾讯NLP服务API
 
 *<u>本项目前端Fork自项目[Chanzhaoyu](https://github.com/Chanzhaoyu)/**[chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web)**</u>*
 
