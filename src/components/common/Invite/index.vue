@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-05-20 19:31:00
- * @LastEditTime: 2023-05-28 08:35:46
+ * @LastEditTime: 2023-06-12 20:26:29
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Invite/index.vue
 -->
@@ -79,10 +79,11 @@ onMounted(() => {
               </span>
               <div class="w-[400px]">
                 {{ inviteInfo.inviteLink }}
-                <NButton text style="font-size: 18px" @click="handleCopyClick">
+                <NButton ghost style="font-size: 16px" @click="handleCopyClick">
                   <NIcon>
                     <CopyIcon />
                   </NIcon>
+                  点击复制
                 </NButton>
               </div>
             </div>

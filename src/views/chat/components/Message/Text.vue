@@ -1,3 +1,10 @@
+<!--
+ * @Author: cloudyi.li
+ * @Date: 2023-03-23 13:51:37
+ * @LastEditTime: 2023-06-12 07:03:54
+ * @LastEditors: cloudyi.li
+ * @FilePath: /chatserver-web/src/views/chat/components/Message/Text.vue
+-->
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import MarkdownIt from 'markdown-it'
@@ -24,7 +31,7 @@ const textRef = ref<HTMLElement>()
 
 const mdi = new MarkdownIt({
   html: true,
-  linkify: true,
+  // linkify: true,
   highlight(code, language) {
     const validLang = !!(language && hljs.getLanguage(language))
     if (validLang) {

@@ -1,17 +1,12 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-27 20:39:20
+ * @LastEditTime: 2023-06-14 21:13:42
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/About.vue
 -->
 <script setup lang='ts'>
 import { NScrollbar } from 'naive-ui'
-import { onMounted } from 'vue'
-let adsenseContent = ''
-onMounted(() => {
-  adsenseContent = document.getElementById('divadsensedisplaynone')?.innerHTML ?? ''
-})
 </script>
 
 <template>
@@ -61,7 +56,6 @@ onMounted(() => {
     <div class="register-footer">
       <p>wooveep 版权所有 © 2023 wooveep.net</p>
     </div>
-    <div id="adsgoeshere" style="background: #1d1f29; padding-top:60px; text-align: center;" v-html="adsenseContent" />
   </div>
 </template>
 
