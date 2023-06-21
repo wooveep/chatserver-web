@@ -45,5 +45,5 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "Deploying application..." 
     - 'sudo docker stop chatserver-web'
     - 'sudo docker rm chatserver-web'
-    - 'sudo docker  run -d -name chatserver-web   -p 18088:80 -e "WEB_URL=chat.lc.wooveep.com" -e "Back_IP=192.168.10.251" wooveep/chatserver-web:deploy'
+    - 'sudo docker  run -d --name chatserver-web   -p 18088:80 -e "WEB_URL=chat.lc.wooveep.com" -e "Back_IP=192.168.10.251" wooveep/chatserver-web:deploy'
     - echo "Application successfully deployed."
