@@ -1,12 +1,16 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:04:10
- * @LastEditTime: 2023-05-28 18:27:10
+ * @LastEditTime: 2023-06-27 14:26:15
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/README.md
 -->
 
 # 基于OPENAI的ChatGPT API开发的AI助手服务
+
+## 更新
+
+  智能搜搜-支持OPENAI 函数调用、与16K模型，使用azureAPI时会使用自己实现的函数调用方式处理。
 
 ## 体验站
 
@@ -17,6 +21,7 @@
 本仓库为前端代码，依赖的后端仓库为[wooveep](https://github.com/wooveep)/[chatserver-api](https://github.com/wooveep/chatserver-api)使用Golang语言编写
 
 - [基于OPENAI的ChatGPT API开发的AI助手服务](#基于openai的chatgpt-api开发的ai助手服务)
+  - [更新](#更新)
   - [体验站](#体验站)
   - [实现功能](#实现功能)
   - [应用场景](#应用场景)
