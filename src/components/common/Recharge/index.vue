@@ -1,19 +1,31 @@
-<!--
- * @Author: cloudyi.li
- * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-26 16:54:00
- * @LastEditors: cloudyi.li
- * @FilePath: /chatserver-web/src/components/common/Setting/Recharge.vue
--->
 <script lang='ts' setup>
 import type { FormInst, FormItemRule, FormRules, MessageReactive, MessageType } from 'naive-ui'
-import { NAvatar, NButton, NCard, NDivider, NForm, NFormItem, NIcon, NInput, NRow, NSpin, NThing, useMessage } from 'naive-ui'
-import { onMounted, ref } from 'vue'
+import { NAvatar, NButton, NCard, NDivider, NForm, NFormItem, NIcon, NInput, NModal, NRow, NScrollbar, NSpin, NThing, useMessage } from 'naive-ui'
+import { computed, onMounted, ref } from 'vue'
 import { CardOutline as CardIcon, ShareSocialOutline as ShareIcon } from '@vicons/ionicons5'
 import type { UserCdkeyPayReq, UserGiftCard, UserGiftCardRes } from '@/models'
 import { fetchCardList, fetchCdkeyPay } from '@/api'
 import { myTrim } from '@/utils/format'
 import { useUserStore } from '@/store'
+
+const props = defineProps<Props>()
+
+const emit = defineEmits<Emit>()
+
+interface Props {
+  visible: boolean
+}
+interface Emit {
+  (e: 'update:visible', visible: boolean): void
+}
+const show = computed({
+  get() {
+    return props.visible
+  },
+  set(visible: boolean) {
+    emit('update:visible', visible)
+  },
+})
 
 const message = useMessage()
 const userStore = useUserStore()
@@ -37,7 +49,6 @@ const rules: FormRules = {
   code_key: [{
     required: true,
     message: '请输入CDKEY卡密',
-    // trigger: ['input', 'blur'],
   },
   {
     validator(rule: FormItemRule, value: string) {
@@ -105,96 +116,84 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="p-4 space-y-5 min-h-[200px]">
-    <div class="space-y-6">
-      <h2 class="recharge-title">
-        {{ $t("giftcard.cdkeyinput") }}
-      </h2>
-    </div>
-    <NForm ref="formRef" label-placement="left" :label-width="80" inline :model="modelRef" :rules="rules">
-      <NFormItem path="code_key" :label="$t('giftcard.cdkey')" label-width="40px">
-        <NInput
-          v-model:value="modelRef.code_key"
+  <NModal
+    v-model:show="show" :auto-focus="true" preset="card" embedded
+    style="width: 95%; max-width: 640px" :title="$t('giftcard.cdkeyinput')"
+  >
+    <div class="p-1 space-y-4 min-h-[200px]">
+      <!-- <div class="space-y-4">
+        <h2 class="recharge-title">
+          {{ $t("giftcard.cdkeyinput") }}
+        </h2>
+      </div> -->
+      <NForm ref="formRef" label-placement="left" :label-width="80" inline :model="modelRef" :rules="rules">
+        <NFormItem path="code_key" :label="$t('giftcard.cdkey')" label-width="40px">
+          <NInput
+            v-model:value="modelRef.code_key"
+            size="large"
+            :placeholder="$t('giftcard.cdkeyplaceholder')"
+            clearable
+            autofocus
+            @keydown.enter.prevent
+            @keypress="handlePress"
+          />
+        </NFormItem>
+        <NButton
+          :disabled="modelRef.code_key === null "
+          round
+          type="primary"
           size="large"
-          :placeholder="$t('giftcard.cdkeyplaceholder')"
-          clearable
-          autofocus
-          @keydown.enter.prevent
-          @keypress="handlePress"
-        />
-      </NFormItem>
-      <NButton
-        class="recharge-button"
-        :disabled="modelRef.code_key === null "
-        round
-        type="primary"
-        size="large"
-        @click="handleRechargeButtonClick"
-      >
-        <span class="button-text">{{ $t('giftcard.cdkeycheck') }}</span>
-      </NButton>
-    </NForm>
-    <NDivider />
-    <NSpin :show="loading">
-      <div class="card-container">
-        <NCard
-          v-for="item in cardlist" :key="item.card_id ?? ''" embedded
-          :bordered="false" :hoverable="true" class="card-item" size="small"
+          @click="handleRechargeButtonClick"
         >
-          <NThing>
-            <template #avatar>
-              <NAvatar>
-                <NIcon>
-                  <CardIcon />
-                </NIcon>
-              </NAvatar>
-            </template>
-            <template #header>
-              {{ item.card_name }}
-            </template>
-            <template #header-extra>
-              <p class="card-link">
-                <NIcon size="14">
-                  <ShareIcon />
-                </NIcon>
-                <a :href="item.card_link ?? '' " target="_blank">{{ $t('giftcard.buy') }}</a>
-              </p>
-            </template>
-            <NRow>
-              <span class="card-discount">¥ {{ item.card_discount }} 元</span>
-            </NRow>
-            <NRow>
-              <span class="card-amount">¥ {{ item.card_amount }} 元</span>
-            </NRow>
-            <template #footer>
-              {{ item.card_comment }}
-            </template>
-          </NThing>
-        </NCard>
-      </div>
-    </NSpin>
-  </div>
+          {{ $t('giftcard.cdkeycheck') }}
+        </NButton>
+      </NForm>
+      <NDivider />
+      <NSpin :show="loading">
+        <NScrollbar style="max-height: 180px" trigger="none">
+          <div class="card-container">
+            <NCard
+              v-for="item in cardlist" :key="item.card_id ?? ''" embedded
+              :bordered="false" :hoverable="true" class="card-item" size="small"
+            >
+              <NThing>
+                <template #avatar>
+                  <NAvatar>
+                    <NIcon>
+                      <CardIcon />
+                    </NIcon>
+                  </NAvatar>
+                </template>
+                <template #header>
+                  {{ item.card_name }}
+                </template>
+                <template #header-extra>
+                  <p class="card-link">
+                    <NIcon size="14">
+                      <ShareIcon />
+                    </NIcon>
+                    <a :href="item.card_link ?? '' " target="_blank">{{ $t('giftcard.buy') }}</a>
+                  </p>
+                </template>
+                <NRow>
+                  <span class="card-discount">¥ {{ item.card_discount }} 元</span>
+                </NRow>
+                <NRow>
+                  <span class="card-amount">¥ {{ item.card_amount }} 元</span>
+                </NRow>
+                <template #footer>
+                  {{ item.card_comment }}
+                </template>
+              </NThing>
+            </NCard>
+          </div>
+        </NScrollbar>
+      </NSpin>
+    </div>
+  </NModal>
 </template>
 
 <style scoped>
-.recharge-title {
-    margin: 20px 0;
-    text-align: left;
-    font-size: 20px;
-    font-weight: bold;
-    /* color: #333; */
-  }
-  .recharge-button {
-  width: 20%;
-  margin: 0px auto;
-  display: block;
-}
-.button-text {
-  font-weight: bold;
-  margin: 0px auto;
-  text-align: center;
- }
-
 .card-container {
   display: flex;
   flex-wrap: wrap;

@@ -1,7 +1,7 @@
 /*
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-04-21 16:21:26
+ * @LastEditTime: 2023-06-21 15:08:15
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/utils/request/axios.ts
  */
@@ -11,6 +11,7 @@ import { useAuthStore } from '@/store'
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_GLOB_API_URL,
+  timeout: 120 * 1000,
 })
 
 service.interceptors.request.use(

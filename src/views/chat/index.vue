@@ -1,16 +1,18 @@
 <script setup lang='ts'>
-import type { Ref } from 'vue'
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
 // import { useRoute } from 'vue-router'
-import { NAutoComplete, NButton, NInput, NSpin, useDialog, useMessage } from 'naive-ui'
-import html2canvas from 'html2canvas'
+import { FlashOutline, SendSharp as SendIcon, StorefrontOutline as StoreIcon } from '@vicons/ionicons5'
+import { History16Filled as HistoryIcon } from '@vicons/fluent'
+import type { InputInst } from 'naive-ui'
+import { NButton, NIcon, NInput, NSpin } from 'naive-ui'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
 import { useChat } from './hooks/useChat'
 import { useCopyCode } from './hooks/useCopyCode'
 import { useMemoryLevel } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
-import { HoverButton, SvgIcon } from '@/components/common'
+import FooterComponent from './components/Footer/index.vue'
+import { SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAuthStore, useChatStore, usePresetStore } from '@/store'
 import { fetchChatChatting, fetchChatRegen, fetchChatUpdate, fetchRefreshToken } from '@/api'
@@ -36,8 +38,8 @@ const regenreq = ref<ChatRegenerategReq>({
 })
 
 // const route = useRoute()
-const dialog = useDialog()
-const ms = useMessage()
+// const dialog = useDialog()
+// const ms = useMessage()
 const authStore = useAuthStore()
 const chatStore = useChatStore()
 const presetStore = usePresetStore()
@@ -46,7 +48,7 @@ const prompt = ref<string>('')
 const loading = ref<boolean>(false)
 const responseWait = ref<boolean>(true)
 const errorstatus = ref<boolean>(false)
-const inputRef = ref<Ref | null>(null)
+const inputInstRef = ref<InputInst | null>(null)
 const questionid = ref<string>('')
 
 // const needPermission = computed(() => !authStore.token)
@@ -322,47 +324,47 @@ function handleSubmit() {
   onConversation()
 }
 
-function handleExport() {
-  if (loading.value)
-    return
+// function handleExport() {
+//   if (loading.value)
+//     return
 
-  const d = dialog.warning({
-    title: t('chat.exportImage'),
-    content: t('chat.exportImageConfirm'),
-    positiveText: t('common.yes'),
-    negativeText: t('common.no'),
-    onPositiveClick: async () => {
-      try {
-        d.loading = true
-        const ele = document.getElementById('image-wrapper')
-        const canvas = await html2canvas(ele as HTMLDivElement, {
-          useCORS: true,
-        })
-        const imgUrl = canvas.toDataURL('image/png')
-        const tempLink = document.createElement('a')
-        tempLink.style.display = 'none'
-        tempLink.href = imgUrl
-        tempLink.setAttribute('download', 'chat-shot.png')
-        if (typeof tempLink.download === 'undefined')
-          tempLink.setAttribute('target', '_blank')
+//   const d = dialog.warning({
+//     title: t('chat.exportImage'),
+//     content: t('chat.exportImageConfirm'),
+//     positiveText: t('common.yes'),
+//     negativeText: t('common.no'),
+//     onPositiveClick: async () => {
+//       try {
+//         d.loading = true
+//         const ele = document.getElementById('image-wrapper')
+//         const canvas = await html2canvas(ele as HTMLDivElement, {
+//           useCORS: true,
+//         })
+//         const imgUrl = canvas.toDataURL('image/png')
+//         const tempLink = document.createElement('a')
+//         tempLink.style.display = 'none'
+//         tempLink.href = imgUrl
+//         tempLink.setAttribute('download', 'chat-shot.png')
+//         if (typeof tempLink.download === 'undefined')
+//           tempLink.setAttribute('target', '_blank')
 
-        document.body.appendChild(tempLink)
-        tempLink.click()
-        document.body.removeChild(tempLink)
-        window.URL.revokeObjectURL(imgUrl)
-        d.loading = false
-        ms.success(t('chat.exportSuccess'))
-        Promise.resolve()
-      }
-      catch (error: any) {
-        ms.error(t('chat.exportFailed'))
-      }
-      finally {
-        d.loading = false
-      }
-    },
-  })
-}
+//         document.body.appendChild(tempLink)
+//         tempLink.click()
+//         document.body.removeChild(tempLink)
+//         window.URL.revokeObjectURL(imgUrl)
+//         d.loading = false
+//         ms.success(t('chat.exportSuccess'))
+//         Promise.resolve()
+//       }
+//       catch (error: any) {
+//         ms.error(t('chat.exportFailed'))
+//       }
+//       finally {
+//         d.loading = false
+//       }
+//     },
+//   })
+// }
 
 function handleMemory() {
   showMemoryLevel.value = true
@@ -430,8 +432,8 @@ async function refreshToken() {
 onMounted(() => {
   refreshToken()
   scrollToBottom()
-  if (inputRef.value && !isMobile.value)
-    inputRef.value?.focus()
+  if (inputInstRef.value && !isMobile.value)
+    inputInstRef.value?.focus()
 })
 
 onUnmounted(() => {
@@ -447,7 +449,6 @@ onUnmounted(() => {
       :using-memory="usingMemory"
       :show-memory-level="showMemoryLevel"
       :show-preset="showPreset"
-      @export="handleExport"
       @toggle-using-context="toggleUsingContext"
     />
     <main class="flex-1 overflow-hidden">
@@ -504,47 +505,46 @@ onUnmounted(() => {
     <footer :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
-          <HoverButton v-if="!isMobile" tooltip="角色切换" @click="handlePreset">
-            <span class="text-xl text-[#4f555e] dark:text-white">
-              <SvgIcon icon="ri:store-3-line" />
-            </span>
-          </HoverButton>
-          <PresetStore v-if="showPreset" v-model:visible="showPreset" :mobile="false" :memorylevel="memorylevel" />
-          <HoverButton v-if="!isMobile" tooltip="保存会话" @click="handleExport">
-            <span class="text-xl text-[#4f555e] dark:text-white">
-              <SvgIcon icon="ri:download-2-line" />
-            </span>
-          </HoverButton>
-          <HoverButton v-if="!isMobile" tooltip="记忆度" @click="handleMemory">
-            <span class="text-xl" :class="{ 'text-[#4b9e5f]': usingMemory, 'text-[#a8071a]': !usingMemory }">
-              <SvgIcon icon="ri:chat-history-line" />
-            </span>
-          </HoverButton>
+          <NButton v-if="!isMobile" ghost round @click="handlePreset">
+            <template #icon>
+              <NIcon>
+                <StoreIcon />
+              </NIcon>
+            </template>角色切换
+          </NButton>
+          <PresetStore v-if="showPreset" v-model:visible="showPreset" :mobile="false" />
+          <NButton v-if="!isMobile" ghost round @click="handleMemory">
+            <template #icon>
+              <NIcon color="#0e7a0d">
+                <HistoryIcon />
+              </NIcon>
+            </template>记忆度
+          </NButton>
           <MemoryLevel v-if="showMemoryLevel" v-model:visible="showMemoryLevel" :mobile="false" :memorylevel="memorylevel" />
-
-          <NAutoComplete v-model:value="prompt">
-            <template #default="{ handleInput, handleBlur, handleFocus }">
-              <NInput
-                ref="inputRef"
-                v-model:value="prompt"
-                type="textarea"
-                :placeholder="placeholder"
-                :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
-                @input="handleInput"
-                @focus="handleFocus"
-                @blur="handleBlur"
-                @keypress="handleEnter"
-              />
+          <NInput
+            ref="inputInstRef"
+            v-model:value="prompt"
+            type="textarea"
+            :placeholder="placeholder"
+            :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
+            :loading="loading"
+            @keypress="handleEnter"
+          >
+            <template #prefix>
+              <NIcon :component="FlashOutline" />
             </template>
-          </NAutoComplete>
+          </NInput>
           <NButton type="primary" :disabled="buttonDisabled" @click="handleSubmit">
             <template #icon>
               <span class="dark:text-black">
-                <SvgIcon icon="ri:send-plane-fill" />
+                <NIcon>
+                  <SendIcon />
+                </NIcon>
               </span>
             </template>
           </NButton>
         </div>
+        <FooterComponent v-if="isMobile" />
       </div>
     </footer>
   </div>

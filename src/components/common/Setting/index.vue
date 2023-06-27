@@ -1,7 +1,7 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-05-28 08:31:01
+ * @LastEditTime: 2023-06-14 17:00:22
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/Setting/index.vue
 -->
@@ -10,7 +10,6 @@ import { computed, onMounted, ref } from 'vue'
 import { NModal, NTabPane, NTabs } from 'naive-ui'
 import General from './General.vue'
 import Password from './Password.vue'
-import Recharge from './Recharge.vue'
 import Config from './Config.vue'
 import About from './About.vue'
 import { SvgIcon } from '@/components/common'
@@ -71,15 +70,6 @@ onMounted(() => {
           </template>
           <div class="min-h-[100px]">
             <Config />
-          </div>
-        </NTabPane>
-        <NTabPane name="Recharge" tab="Recharge">
-          <template #tab>
-            <SvgIcon class="text-lg" icon="ri:money-cny-box-line" />
-            <span class="ml-2">{{ $t('setting.recharge') }}</span>
-          </template>
-          <div class="min-h-[100px]">
-            <Recharge />
           </div>
         </NTabPane>
         <NTabPane name="Password" tab="Password">

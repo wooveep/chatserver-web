@@ -72,8 +72,8 @@ function isActive(uuid: string) {
 </script>
 
 <template>
-  <NScrollbar class="px-4">
-    <div class="flex flex-col gap-2 text-sm">
+  <NScrollbar class="pt-6 px-2">
+    <div class="flex flex-col gap-2 text-sm ">
       <template v-if="!dataSources.length">
         <div class="flex flex-col items-center mt-4 text-center text-neutral-300">
           <SvgIcon icon="ri:inbox-line" class="mb-2 text-3xl" />
@@ -90,7 +90,7 @@ function isActive(uuid: string) {
             <span>
               <SvgIcon icon="ri:message-3-line" />
             </span>
-            <div class="relative flex-1 overflow-hidden break-all text-ellipsis whitespace-nowrap">
+            <div class="relative flex-1 w-24 overflow-hidden break-all text-ellipsis whitespace-nowrap">
               <NInput
                 v-if="item.isEdit"
                 v-model:value="item.title" size="tiny"
