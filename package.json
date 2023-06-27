@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@traptitech/markdown-it-katex": "^3.6.0",
+    "@vicons/fluent": "^0.12.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vueuse/core": "^9.13.0",
     "clipboard": "^2.0.11",

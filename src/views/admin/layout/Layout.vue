@@ -1,33 +1,26 @@
 <!--
  * @Author: cloudyi.li
- * @Date: 2023-03-23 13:51:37
- * @LastEditTime: 2023-06-14 19:45:29
+ * @Date: 2023-06-10 22:19:17
+ * @LastEditTime: 2023-06-11 13:43:34
  * @LastEditors: cloudyi.li
- * @FilePath: /chatserver-web/src/views/chat/layout/Layout.vue
+ * @FilePath: /chatserver-web/src/views/admin/layout/Layout.vue
 -->
 <script setup lang='ts'>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
 import { NLayout, NLayoutContent } from 'naive-ui'
-import { useRouter } from 'vue-router'
-import { useChat } from '../hooks/useChat'
 import Sider from './sider/index.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useAppStore, useAuthStore, useChatStore } from '@/store'
+import { useAppStore } from '@/store'
 // const Permission = defineAsyncComponent(() => import('./Permission.vue'))
-
 const router = useRouter()
+const route = useRoute()
 const appStore = useAppStore()
-const chatStore = useChatStore()
-const authStore = useAuthStore()
-const { fetchChatHistoryList, resetChat } = useChat()
-
-router.replace({ name: 'Chat', params: { chat_uuid: chatStore.active } })
 
 const { isMobile } = useBasicLayout()
 
 const collapsed = computed(() => appStore.siderCollapsed)
-
-const needPermission = computed(() => !authStore.token)
 
 const getMobileClass = computed(() => {
   if (isMobile.value)
@@ -35,26 +28,19 @@ const getMobileClass = computed(() => {
   return ['border', 'rounded-md', 'shadow-md', 'dark:border-neutral-800']
 })
 
+function useTitle(title: string) {
+  document.title = `Admin|${title}`
+}
+
 const getContainerClass = computed(() => {
   return [
     'h-full',
-    { 'pl-[320px]': !isMobile.value && !collapsed.value },
+    { 'pl-[260px]': !isMobile.value && !collapsed.value },
   ]
 })
-
-onMounted(async () => {
-  if (!needPermission.value)
-    await fetchChatHistoryList()
-  else
-    window.location.replace('/#/login')
+router.afterEach(() => {
+  useTitle(route.meta.title as string)
 })
-
-window.onbeforeunload = function (e) {
-  e = e || window.event
-  if (e)
-    resetChat()
-  resetChat()
-}
 </script>
 
 <template>
@@ -69,6 +55,5 @@ window.onbeforeunload = function (e) {
         </NLayoutContent>
       </NLayout>
     </div>
-    <!-- <Permission :visible="needPermission" /> -->
   </div>
 </template>

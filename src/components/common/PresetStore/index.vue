@@ -1,13 +1,13 @@
 <!--
  * @Author: cloudyi.li
  * @Date: 2023-04-20 18:57:17
- * @LastEditTime: 2023-05-28 12:55:18
+ * @LastEditTime: 2023-06-13 14:59:24
  * @LastEditors: cloudyi.li
  * @FilePath: /chatserver-web/src/components/common/PresetStore/index.vue
 -->
 <script setup lang='ts'>
 import { computed, onMounted, ref } from 'vue'
-import { NButton, NCard, NModal, NRadio, NRadioGroup, useMessage } from 'naive-ui'
+import { NButton, NCard, NModal, NRadio, NRadioGroup, NScrollbar, useMessage } from 'naive-ui'
 import { useChatStore, usePresetStore } from '@/store'
 import { fetchChatClear, fetchChatUpdate } from '@/api'
 import { usePreset } from '@/views/chat/hooks/userPreset'
@@ -70,20 +70,22 @@ onMounted(() => {
   <NModal v-model:show="show" :auto-focus="false" preset="card" style="width: 95%; max-width: 640px">
     <NCard role="dialog" aria-modal="true" :title="$t('store.title')" :bordered="false" style="width: 100%; max-width: 640px;">
       <div class="flex flex-wrap items-center gap-4">
-        <NRadioGroup v-model:value="checkPreset" name="radiobuttongroup1" size="small">
-          <div class="card-container">
-            <NRadio
-              v-for="preset in currentPreset" :key="preset.preset_id"
-              style="font-size: 16px"
-              text
-              :value="preset.preset_id"
-              size="small"
-              class="card-item"
-            >
-              {{ preset.preset_name }}
-            </NRadio>
-          </div>
-        </NRadioGroup>
+        <NScrollbar style="max-height: 120px" trigger="none">
+          <NRadioGroup v-model:value="checkPreset" name="radiobuttongroup1" size="small">
+            <div class="card-container">
+              <NRadio
+                v-for="preset in currentPreset" :key="preset.preset_id"
+                style="font-size: 16px"
+                text
+                :value="preset.preset_id"
+                size="small"
+                class="card-item"
+              >
+                {{ preset.preset_name }}
+              </NRadio>
+            </div>
+          </NRadioGroup>
+        </NScrollbar>
       </div>
       <div class="flex flex-wrap items-center gap-4">
         <span class="flex-shrink-0 w-[100px]" />
@@ -110,7 +112,7 @@ onMounted(() => {
 }
 @media (max-width: 600px) {
   .card-item {
-    flex: 0 0 100%; /* 在移动端设置为占满一行 */
+    flex: 0 0 calc(50% - 10px); /* 在移动端设置为占满一行 */
     min-width: 0; /* 取消最小宽度限制 */
   }
 }
